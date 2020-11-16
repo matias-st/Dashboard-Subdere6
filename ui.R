@@ -3,9 +3,12 @@ library(shiny)
 library(shinydashboard)
 library(ggplot2)
 library(plotly)
+library(shiny)
+library(readxl)
+library(googledrive)
+library(googlesheets4)
+library(tidyverse)
 
-BDiniciativas0 <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0%22",
-                             sheet = "iniciativas")
 ##ShinyUI muestra la parte visual de la pagina, y dashboardPage presenta el dashboard
 shinyUI(dashboardPage(
 
@@ -79,7 +82,7 @@ shinyUI(dashboardPage(
                     h2("Indicadores por iniciativa"),
                     fluidRow(
                         box(selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
-                                        choices = unique(BDiniciativas0$`Nombre Proyecto`)
+                                        choices = unique("lista nombres iniciativas")
                                         )
                             )
                     ),

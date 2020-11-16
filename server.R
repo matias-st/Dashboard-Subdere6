@@ -1,9 +1,3 @@
-##se cargan las librerias para utilizar sus funciones
-library(shiny)
-library(readxl)
-library(googledrive)
-library(googlesheets4)
-library(tidyverse)
 
 #shinyServer() sirve para desarrollar todas las funciones de la aplicacion.
 shinyServer(function(input, output) {
@@ -29,18 +23,20 @@ shinyServer(function(input, output) {
         )
     })
     
+    
     numeroIniciativasTotales <- nrow(BDiniciativas0)
     iniciativasSectorPriorizado <- filter(BDiniciativas0, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     numeroIniciativasSectPr <- nrow(iniciativasSectorPriorizado)
     indSecPriorizado <- (numeroIniciativasSectPr/numeroIniciativasTotales)*100
     aproximacionSecPriorizado <- round(indSecPriorizado, 2)
-    porcentaje <- str_c( aproximacionSecPriorizado, "%")
+    porcentajeSectPrio <- str_c( aproximacionSecPriorizado, "%")
     output$indSectorPriorizadoReg <- renderInfoBox({
         infoBox(
-            "Iniciativas en sector priorizado", porcentaje , icon = icon("fas fa-check-circle"),
+            "Iniciativas en sector priorizado", porcentajeSectPrio , icon = icon("fas fa-check-circle"),
             width = 6, color = "green", fill = TRUE
         )
     })
+    
     output$indSectorPriorizadoNac <- renderInfoBox({
         infoBox(
             "Iniciativas en sector priorizado", "76%", icon = icon("fas fa-check-circle"),
@@ -48,12 +44,25 @@ shinyServer(function(input, output) {
         )
     })
     
+    añoActual <- max(BDiniciativas0$Año)
+    añoAnterior <- añoActual - 1
+    iniciativasSectPrioAñoActual <- filter(BDiniciativas0, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
+    iniciativasSectPrioAñoAnterior <- filter(BDiniciativas0, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    numeroIniciativasSectPrAñoAnterior <- nrow(iniciativasSectPrioAñoAnterior)
+    totalIniciativasAñoAnterior <- filter(BDiniciativas0, Año == añoAnterior)
+    numeroIniciativasAñoAnterior <- nrow(totalIniciativasAñoAnterior)
+    
+    indCrecSecPriorizado <- ((numeroIniciativasSectPrAñoActual-numeroIniciativasSectPrAñoAnterior)/numeroIniciativasAñoAnterior)*100
+    aproximacionCrecSecPriorizado <- round(indCrecSecPriorizado, 2)
+    porcentajeCrecSectPrio <- str_c( aproximacionCrecSecPriorizado, "%")
     output$indCrecimientoSPReg <- renderInfoBox({
         infoBox(
-            "Crecimiento en sectores priorizados", "5%", icon = icon("fas fa-chart-line"),
+            "Crecimiento en sectores priorizados", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
             width = 6, color = "blue", fill = TRUE
         )
     })
+    
     output$indCrecimientoSPNac <- renderInfoBox({
         infoBox(
             "Crecimiento en sectores priorizados", "2%", icon = icon("fas fa-chart-line"),
