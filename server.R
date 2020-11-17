@@ -156,7 +156,7 @@ shinyServer(function(input, output) {
       width = 4, color = "blue", fill = TRUE
     )
   })
-  output$indBeneficiarios <- renderinfoBox({
+  output$indBeneficiarios <- infoBox({
     
     benefObj <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto` == "Transferencia programa de fortalecimiento tecnológico para la industria")
     benefObj <- select(benefObj, "Beneficiarios objetivos")
