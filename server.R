@@ -12,10 +12,7 @@ shinyServer(function(input, output) {
                                 sheet = "seguimiento")
     
   
-    
-    #funciona al colocar un nombre concreto
-   
-   
+
     
 ##output$ind... envia al ui.R las cajas de todos de los indicadores que se ven en infobox.
     output$indIniciativasAtrasadasReg <- renderInfoBox({
