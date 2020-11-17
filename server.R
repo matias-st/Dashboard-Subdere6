@@ -20,14 +20,7 @@ shinyServer(function(input, output) {
                                 sheet = "seguimiento")
   
   
-  #debería ir la fórmula
-  benefEfectivo <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto`== input$Iniciativas )
-  benefEfectivo <- select(benefEfectivo, BDbeneficiarios$`Beneficiarios efectivos` )
-  
-  benefObjetivo <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto`== input$Iniciativas)
-  benefObjetivo <- select(BDbeneficiarios,BDbeneficiarios$`Beneficiarios objetivos`)
-  
-  indBenefEfectivo <- ((benefEfectivo/benefObjetivo)*100)
+ 
   
   ##output$ind... envia al ui.R las cajas de todos de los indicadores que se ven en infobox.
   output$indIniciativasAtrasadasReg <- renderInfoBox({
