@@ -3,16 +3,11 @@ library(shiny)
 library(shinydashboard)
 library(ggplot2)
 library(plotly)
-<<<<<<< Updated upstream
-library(shiny)
 library(readxl)
 library(googledrive)
 library(googlesheets4)
 library(tidyverse)
-=======
-library(googledrive)
-library(googlesheets4)
->>>>>>> Stashed changes
+
 
 ##ShinyUI muestra la parte visual de la pagina, y dashboardPage presenta el dashboard
 shinyUI(dashboardPage(
