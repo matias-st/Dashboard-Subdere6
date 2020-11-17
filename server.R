@@ -55,9 +55,21 @@ shinyServer(function(input, output) {
     )
   })
   
+  añoActual <- max(BDiniciativas0$Año)
+  añoAnterior <- añoActual - 1
+  iniciativasSectPrioAñoActual <- filter(BDiniciativas0, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+  numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
+  iniciativasSectPrioAñoAnterior <- filter(BDiniciativas0, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+  numeroIniciativasSectPrAñoAnterior <- nrow(iniciativasSectPrioAñoAnterior)
+  totalIniciativasAñoAnterior <- filter(BDiniciativas0, Año == añoAnterior)
+  numeroIniciativasAñoAnterior <- nrow(totalIniciativasAñoAnterior)
+  
+  indCrecSecPriorizado <- ((numeroIniciativasSectPrAñoActual-numeroIniciativasSectPrAñoAnterior)/numeroIniciativasAñoAnterior)*100
+  aproximacionCrecSecPriorizado <- round(indCrecSecPriorizado, 2)
+  porcentajeCrecSectPrio <- str_c( aproximacionCrecSecPriorizado, "%")
   output$indCrecimientoSPReg <- renderInfoBox({
     infoBox(
-      "Crecimiento en sectores priorizados", "5%", icon = icon("fas fa-chart-line"),
+      "Crecimiento en sectores priorizados", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
       width = 6, color = "blue", fill = TRUE
     )
   })
@@ -131,6 +143,7 @@ shinyServer(function(input, output) {
       width = 4, color = "orange", fill = TRUE
     )
   })
+  
   output$indAvanceActividades <- renderInfoBox({
     infoBox(
       "Avance según actividades", "60%", icon = icon("fas fa-clipboard"),
@@ -143,7 +156,18 @@ shinyServer(function(input, output) {
       width = 4, color = "blue", fill = TRUE
     )
   })
-  
+  output$indBeneficiarios <- renderinfoBox({
+    
+    benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+    benefObj <- select(benefObj, "Beneficiarios objetivos")
+    
+    benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+    benefEfe <- select(benefEfe, "Beneficiarios efectivos")
+    
+    indBenefEfect <- ((benefEfe/benefObj)*100) 
+    
+    infoBox(indBenefEfect)
+  })
   output$indBeneficiarios <- renderInfoBox({
     
     
