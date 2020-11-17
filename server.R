@@ -15,22 +15,7 @@ shinyServer(function(input, output) {
     
     #funciona al colocar un nombre concreto
    
-    
-    #intento de indicadorbeneficiarios
-    output$indBeneficiarios <- infoBox({
-        
-        benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
-        benefObj <- select(benefObj, "Beneficiarios objetivos")
-        View(benefObj)
-        
-        benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
-        benefEfe <- select(benefEfe, "Beneficiarios efectivos")
-        View(benefEfe)
-        
-        indBeneficiarios <- ((benefEfe/benefObj)*100) 
-        
-        infoBox(indBeneficiarios)
-    })
+   
     
 ##output$ind... envia al ui.R las cajas de todos de los indicadores que se ven en infobox.
     output$indIniciativasAtrasadasReg <- renderInfoBox({
@@ -170,12 +155,24 @@ shinyServer(function(input, output) {
         )
     })
     
-   
-    output$indBeneficiarios <- renderInfoBox({
-        infoBox(
-                 "Beneficiarios efectivos cubiertos", indBeneficiarios, icon = icon("fas fa-users"),
-                  width = 6, color = "yellow", fill = TRUE
-                )
+    
+    #intento de indicadorbeneficiarios
+    output$indBeneficiarios <- infoBox({
+      
+      benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+      benefObj <- select(benefObj, "Beneficiarios objetivos")
+      View(benefObj)
+      
+      benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+      benefEfe <- select(benefEfe, "Beneficiarios efectivos")
+      View(benefEfe)
+      
+      indBeneficiarios <- ((benefEfe/benefObj)*100) 
+      
+      infoBox(indBeneficiarios)
+    })
+  
+    
     })
     output$indBeneficiariosEmpresa <- renderInfoBox({
         infoBox(
