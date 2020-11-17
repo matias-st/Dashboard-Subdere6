@@ -158,10 +158,10 @@ shinyServer(function(input, output) {
   })
   output$indBeneficiarios <- renderinfoBox({
     
-    benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+    benefObj <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto` == input$Iniciativas)
     benefObj <- select(benefObj, "Beneficiarios objetivos")
     
-    benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+    benefEfe <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto` == input$Iniciativas)
     benefEfe <- select(benefEfe, "Beneficiarios efectivos")
     
     indBenefEfect <- ((benefEfe/benefObj)*100) 
