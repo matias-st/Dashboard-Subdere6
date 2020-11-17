@@ -157,19 +157,23 @@ shinyServer(function(input, output) {
     
     
     #intento de indicadorbeneficiarios
+    indBenefEfe <- reactive({
+      gettext(input$Iniciativa)
+    })
+   
     output$indBeneficiarios <- infoBox({
       
-      benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+      benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == indBenefEfe())
       benefObj <- select(benefObj, "Beneficiarios objetivos")
-      View(benefObj)
       
-      benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+      
+      benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == indBenefEfe())
       benefEfe <- select(benefEfe, "Beneficiarios efectivos")
-      View(benefEfe)
       
-      indBeneficiarios <- ((benefEfe/benefObj)*100) 
+      indBenef <- ((benefEfe/benefObj)*100)
+     
       
-      infoBox(indBeneficiarios)
+      infoBox(indBenef)
     })
   
     
