@@ -156,15 +156,17 @@ shinyServer(function(input, output) {
       width = 4, color = "blue", fill = TRUE
     )
   })
-  output$indBeneficiarios <- infoBox({
+  #Fórmula
+  benefObj <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto` == "Transferencia programa de fortalecimiento tecnológico para la industria")
+  benefObj <- select(benefObj, "Beneficiarios objetivos")
+  
+  benefEfe <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto` == "Transferencia programa de fortalecimiento tecnológico para la industria")
+  benefEfe <- select(benefEfe, "Beneficiarios efectivos")
+  
+  indBenefEfect <- ((benefEfe/benefObj)*100) 
+  
+  output$indBeneficiarios <- renderinfoBox({
     
-    benefObj <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto` == "Transferencia programa de fortalecimiento tecnológico para la industria")
-    benefObj <- select(benefObj, "Beneficiarios objetivos")
-    
-    benefEfe <- filter(BDbeneficiarios, BDbeneficiarios$`Nombre Proyecto` == "Transferencia programa de fortalecimiento tecnológico para la industria")
-    benefEfe <- select(benefEfe, "Beneficiarios efectivos")
-    
-    indBenefEfect <- ((benefEfe/benefObj)*100) 
     
     infoBox("Beneficiarios efecctivos cubiertos", indBenefEfect, icon = icon("fas fa-industry"),
             width = 6, color = "yellow", fill = TRUE
