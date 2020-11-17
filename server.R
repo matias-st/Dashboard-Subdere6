@@ -13,9 +13,6 @@ shinyServer(function(input, output) {
     
   
     
-    #funciona al colocar un nombre concreto
-   
-   
     
 ##output$ind... envia al ui.R las cajas de todos de los indicadores que se ven en infobox.
     output$indIniciativasAtrasadasReg <- renderInfoBox({
@@ -161,11 +158,9 @@ shinyServer(function(input, output) {
       
       benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
       benefObj <- select(benefObj, "Beneficiarios objetivos")
-      View(benefObj)
       
       benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
       benefEfe <- select(benefEfe, "Beneficiarios efectivos")
-      View(benefEfe)
       
       indBeneficiarios <- ((benefEfe/benefObj)*100) 
       
@@ -173,7 +168,7 @@ shinyServer(function(input, output) {
     })
   
     
-    })
+    
     output$indBeneficiariosEmpresa <- renderInfoBox({
         infoBox(
             "Beneficiarios empresa cubiertos", "14%", icon = icon("fas fa-industry"),
