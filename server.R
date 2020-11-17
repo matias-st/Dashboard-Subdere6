@@ -176,8 +176,6 @@ shinyServer(function(input, output) {
       infoBox(indBenef)
     })
   
-    
-    })
     output$indBeneficiariosEmpresa <- renderInfoBox({
         infoBox(
             "Beneficiarios empresa cubiertos", "14%", icon = icon("fas fa-industry"),
