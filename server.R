@@ -1,4 +1,5 @@
 
+
 #shinyServer() sirve para desarrollar todas las funciones de la aplicacion.
 shinyServer(function(input, output) {
     
@@ -7,7 +8,29 @@ shinyServer(function(input, output) {
                                 sheet = "iniciativas")
     BDregiones <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0", 
                              sheet="poblacion potencial")
+    BDseguimiento <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1120700756",
+                                sheet = "seguimiento")
     
+  
+    
+    #funciona al colocar un nombre concreto
+   
+    
+    #intento de indicadorbeneficiarios
+    output$indBeneficiarios <- infoBox({
+        
+        benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+        benefObj <- select(benefObj, "Beneficiarios objetivos")
+        View(benefObj)
+        
+        benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == input$Iniciativas)
+        benefEfe <- select(benefEfe, "Beneficiarios efectivos")
+        View(benefEfe)
+        
+        indBeneficiarios <- ((benefEfe/benefObj)*100) 
+        
+        infoBox(indBeneficiarios)
+    })
     
 ##output$ind... envia al ui.R las cajas de todos de los indicadores que se ven en infobox.
     output$indIniciativasAtrasadasReg <- renderInfoBox({
@@ -133,6 +156,7 @@ shinyServer(function(input, output) {
             width = 4, color = "orange", fill = TRUE
         )
     })
+
     output$indAvanceActividades <- renderInfoBox({
         infoBox(
             "Avance según actividades", "60%", icon = icon("fas fa-clipboard"),
@@ -145,11 +169,13 @@ shinyServer(function(input, output) {
             width = 4, color = "blue", fill = TRUE
         )
     })
+    
+   
     output$indBeneficiarios <- renderInfoBox({
         infoBox(
-            "Beneficiarios efectivos cubiertos", "90%", icon = icon("fas fa-users"),
-            width = 6, color = "yellow", fill = TRUE
-        )
+                 "Beneficiarios efectivos cubiertos", indBeneficiarios, icon = icon("fas fa-users"),
+                  width = 6, color = "yellow", fill = TRUE
+                )
     })
     output$indBeneficiariosEmpresa <- renderInfoBox({
         infoBox(
