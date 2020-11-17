@@ -166,16 +166,11 @@ shinyServer(function(input, output) {
     
     indBenefEfect <- ((benefEfe/benefObj)*100) 
     
-    infoBox(indBenefEfect)
+    infoBox("Beneficiarios efecctivos cubiertos", indBenefEfect, icon = icon("fas fa-industry"),
+            width = 6, color = "yellow", fill = TRUE
+            )
   })
-  output$indBeneficiarios <- renderInfoBox({
-    
-    
-    infoBox(
-      "Beneficiarios efectivos cubiertos", "90%", icon = icon("fas fa-users"),
-      width = 6, color = "yellow", fill = TRUE
-    )
-  })
+  
   output$indBeneficiariosEmpresa <- renderInfoBox({
     
     
