@@ -142,6 +142,9 @@ shinyServer(function(input, output) {
         )
     })
 
+    #Fórmula de indicador avance actividades
+    
+    
     output$indAvanceActividades <- renderInfoBox({
         infoBox(
             "Avance según actividades", "60%", icon = icon("fas fa-clipboard"),
@@ -155,25 +158,25 @@ shinyServer(function(input, output) {
         )
     })
     
+    BDseguimiento
+  
+    benefObj <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, "Transferencia programa de fortalecimiento tecnológico para la industria") == TRUE)
+    benefObj <- select(benefObj, "beneficiariosObjetivos")
+ 
     
-    #intento de indicadorbeneficiarios
-    indBenefEfe <- reactive({
-      gettext(input$Iniciativa)
-    })
-   
-    output$indBeneficiarios <- infoBox({
+    benefEfe <- filter(BDseguimiento,str_detect(BDseguimiento$`Nombre Proyecto`, "Transferencia programa de fortalecimiento tecnológico para la industria"))
+    benefEfe <- select(benefEfe, "beneficiariosEfectivos")
+ 
+    indBenef <- ((benefEfe/benefObj)*100)
+    indBenef <- str_c( indBenef, "%")
+    
+    output$indBeneficiarios <- renderInfoBox({
       
-      benefObj <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == indBenefEfe())
-      benefObj <- select(benefObj, "Beneficiarios objetivos")
+      infoBox(
+        "Beneficiarios efectivos cubierto", indBenef, icon = icon("fas fa-industry"),
+        width = 6, color = "purple", fill = TRUE
+      )
       
-      
-      benefEfe <- filter(BDseguimiento, BDseguimiento$`Nombre Proyecto` == indBenefEfe())
-      benefEfe <- select(benefEfe, "Beneficiarios efectivos")
-      
-      indBenef <- ((benefEfe/benefObj)*100)
-     
-      
-      infoBox(indBenef)
     })
   
     output$indBeneficiariosEmpresa <- renderInfoBox({

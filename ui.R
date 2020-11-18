@@ -7,6 +7,7 @@ library(readxl)
 library(googledrive)
 library(googlesheets4)
 library(tidyverse)
+library(stringr)
 
 ##ShinyUI muestra la parte visual de la pagina, y dashboardPage presenta el dashboard
 shinyUI(dashboardPage(
