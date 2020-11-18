@@ -146,29 +146,25 @@ shinyServer(function(input, output) {
     ##Fórmula de indicador avance actividades
     #Obtengo los datos de las iniciativas
     activ <- filter(BDavances, str_detect (BDavances$`Nombre Proyecto`, "Transferencia programa de fortalecimiento tecnológico para la industria"))
-   
-     View(activ)
+  
     #elimino duplicados en caso de que existan
     activ <- activ[!duplicated(activ),]
-    View(activ)
+   
       #para actividades realizadas
     #selecciono el estado de las actividades
     estadoAct <- select(activ, "Estado act")
-    View(estadoAct)
+   
     numActTotales <- nrow(estadoAct)
-    View(numActTotales)
-    #acá no me hace bien el filtro
-    actRealizadas <- filter(estadoAct, str_detect(activ$`Estado act`, "entregado") == TRUE)
-    View(actRealizadas)
-    numActRealizadas <- nrow(actRealizadas)
-    View(numActRealizadas)
     
+    actRealizadas <- filter(estadoAct, str_detect(activ$`Estado act`, "entregado") == TRUE)
+  
+    numActRealizadas <- nrow(actRealizadas)
+ 
     
   indAvanceAct <- ((numActRealizadas/numActTotales)*100)
   indAvanceAct <- round(indAvanceAct, 2)
   indAvanceAct <- str_c(indAvanceAct, "%")
-      View(indAvanceAct)
-    
+
     #para actividades atrasadas
    
     
@@ -185,27 +181,24 @@ shinyServer(function(input, output) {
         )
     })
     
-    BDseguimiento
-  
-    benefObj <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, "Transferencia programa de fortalecimiento tecnológico para la industria") == TRUE)
-    benefObj <- select(benefObj, "beneficiariosObjetivos")
- 
-    
-    benefEfe <- filter(BDseguimiento,str_detect(BDseguimiento$`Nombre Proyecto`, "Transferencia programa de fortalecimiento tecnológico para la industria"))
-    benefEfe <- select(benefEfe, "beneficiariosEfectivos")
- 
-    indBenef <- ((benefEfe/benefObj)*100)
-    indBenef <- round(indBenef, digits = 2)
-    indBenef <- str_c( indBenef, "%")
-    
+    #intento de indicador beneficiarios
     output$indBeneficiarios <- renderInfoBox({
       
-      infoBox(
-        "Beneficiarios efectivos cubierto", indBenef, icon = icon("fas fa-industry"),
-        width = 6, color = "purple", fill = TRUE
-      )
       
+      benefIniciativas <- BDseguimiento[BDseguimiento$`Nombre Proyecto` == input$Iniciativas,]
+      benefObj <- select(benefIniciativas, "beneficiariosObjetivos")
+      benefEfe <- select(benefIniciativas, "beneficiariosEfectivos")
+      
+      indBeneficiarios <- ((benefEfe/benefObj)*100) 
+      indBeneficiarios <- str_c(indBeneficiarios, "%")
+      indBeneficiarios <- as.character(indBeneficiarios)
+      ?as.character
+      infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-clipboard"),
+              width = 4, color = "green", fill = TRUE
+             )
     })
+    
+    #intento con reactive
   
     output$indBeneficiariosEmpresa <- renderInfoBox({
         infoBox(

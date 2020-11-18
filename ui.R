@@ -85,6 +85,7 @@ shinyUI(dashboardPage(
                                         choices = unique(BDiniciativas0$`Nombre Proyecto`),
                                         selected= BDiniciativas0$`Nombre Proyecto`[1]
                                         )
+                            
                             )
                         
                         
