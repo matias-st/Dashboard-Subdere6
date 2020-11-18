@@ -10,7 +10,8 @@ shinyServer(function(input, output) {
                              sheet="poblacion potencial")
     BDseguimiento <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1120700756",
                                 sheet = "seguimiento")
-    
+    BDavances <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1496146068",
+                            sheet = "actividades y componentes")
   
     
     #funciona al colocar un nombre concreto
@@ -142,12 +143,38 @@ shinyServer(function(input, output) {
         )
     })
 
-    #Fórmula de indicador avance actividades
+    ##Fórmula de indicador avance actividades
+    #Obtengo los datos de las iniciativas
+    activ <- filter(BDavances, str_detect (BDavances$`Nombre Proyecto`, "Transferencia programa de fortalecimiento tecnológico para la industria"))
+   
+     View(activ)
+    #elimino duplicados en caso de que existan
+    activ <- activ[!duplicated(activ),]
+    View(activ)
+      #para actividades realizadas
+    #selecciono el estado de las actividades
+    estadoAct <- select(activ, "Estado act")
+    View(estadoAct)
+    numActTotales <- nrow(estadoAct)
+    View(numActTotales)
+    #acá no me hace bien el filtro
+    actRealizadas <- filter(estadoAct, str_detect(activ$`Estado act`, "entregado") == TRUE)
+    View(actRealizadas)
+    numActRealizadas <- nrow(actRealizadas)
+    View(numActRealizadas)
     
+    
+  indAvanceAct <- ((numActRealizadas/numActTotales)*100)
+  indAvanceAct <- round(indAvanceAct, 2)
+  indAvanceAct <- str_c(indAvanceAct, "%")
+      View(indAvanceAct)
+    
+    #para actividades atrasadas
+   
     
     output$indAvanceActividades <- renderInfoBox({
         infoBox(
-            "Avance según actividades", "60%", icon = icon("fas fa-clipboard"),
+            "Avance según actividades", indAvanceAct, icon = icon("fas fa-clipboard"),
             width = 4, color = "green", fill = TRUE
         )
     })
