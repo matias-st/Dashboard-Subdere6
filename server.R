@@ -168,6 +168,7 @@ shinyServer(function(input, output) {
     benefEfe <- select(benefEfe, "beneficiariosEfectivos")
  
     indBenef <- ((benefEfe/benefObj)*100)
+    indBenef <- round(indBenef, digits = 2)
     indBenef <- str_c( indBenef, "%")
     
     output$indBeneficiarios <- renderInfoBox({
