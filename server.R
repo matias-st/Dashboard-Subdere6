@@ -181,24 +181,27 @@ shinyServer(function(input, output) {
         )
     })
     
+  
     #intento de indicador beneficiarios
     output$indBeneficiarios <- renderInfoBox({
-      
-      
-      benefIniciativas <- BDseguimiento[BDseguimiento$`Nombre Proyecto` == input$Iniciativas,]
+      x <- input$Iniciativas
+      View(x)
+      benefIniciativas <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x) == TRUE) 
+      View(benefIniciativas)
       benefObj <- select(benefIniciativas, "beneficiariosObjetivos")
       benefEfe <- select(benefIniciativas, "beneficiariosEfectivos")
       
-      indBeneficiarios <- ((benefEfe/benefObj)*100) 
+      indBeneficiarios <- ((benefEfe/benefObj)*100)
+      indBeneficiarios <- round(indBeneficiarios,2)
       indBeneficiarios <- str_c(indBeneficiarios, "%")
-      indBeneficiarios <- as.character(indBeneficiarios)
-      ?as.character
+      
       infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-clipboard"),
               width = 4, color = "green", fill = TRUE
-             )
+      )
     })
+   
     
-    #intento con reactive
+  
   
     output$indBeneficiariosEmpresa <- renderInfoBox({
         infoBox(

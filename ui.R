@@ -83,7 +83,7 @@ shinyUI(dashboardPage(
                     fluidRow(
                         box(selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
                                         choices = unique(BDiniciativas0$`Nombre Proyecto`),
-                                        selected= BDiniciativas0$`Nombre Proyecto`[1]
+                                        selected= unique(BDiniciativas0$`Nombre Proyecto`[1])
                                         )
                             
                             )
