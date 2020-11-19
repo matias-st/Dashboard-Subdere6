@@ -148,14 +148,14 @@ shinyServer(function(input, output) {
       View(fechaEnt)
       tpoTotal <- (fechaEnt- fechaCom)
       View(tpoTotal)
-      fechaActual <- Sys.Date()
+      fechaActual <- as.Date(Sys.Date())
       View(fechaActual)
+      ##este calculo no lo hace
+      #Métodos incompatibles ("-.Date", "Ops.data.frame") para "-"
+      #Warning: Error in -: argumento no-numérico para operador binario 
       tpoAvanzado <- (fechaActual - fechaCom)
       View(tpoAvanzado)
       
-      ##este calculo no lo hace
-        #Métodos incompatibles ("-.Date", "Ops.data.frame") para "-"
-        #Warning: Error in -: argumento no-numérico para operador binario 
       indTpoTrans <- ((tpoAvanzado / tpoTotal)*100)
       indTpoTrans2 <- round(indTpoTrans)
       indTpoTrans3 <- str_c(indTpoTrans2, "%")
