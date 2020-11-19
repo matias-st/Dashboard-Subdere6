@@ -2,12 +2,22 @@
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
+library(googledrive)
 library(plotly)
 library(readxl)
-library(googledrive)
-library(googlesheets4)
 library(tidyverse)
 library(stringr)
+library(googlesheets4)
+
+##se crean las variables BDiniciativas y BDregiones, luego con read_sheet() se lee el excel desde google drive con el link, sheet es igual a la hoja que se esta cargando.
+BDiniciativas0 <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0",
+                             sheet = "iniciativas")
+BDregiones <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1288196927", 
+                         sheet="poblacion potencial")
+BDseguimiento <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1120700756",
+                            sheet = "seguimiento")
+BDavances <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1496146068",
+                        sheet = "actividades y componentes")
 
 ##ShinyUI muestra la parte visual de la pagina, y dashboardPage presenta el dashboard
 shinyUI(dashboardPage(

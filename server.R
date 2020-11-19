@@ -1,18 +1,15 @@
-
-
 #shinyServer() sirve para desarrollar todas las funciones de la aplicacion.
 shinyServer(function(input, output) {
     
-    ##se crean las variables BDiniciativas y BDregiones, luego con read_sheet() se lee el excel desde google drive con el link, sheet es igual a la hoja que se esta cargando.
-    BDiniciativas0 <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0%22",
-                                sheet = "iniciativas")
-    BDregiones <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0", 
-                             sheet="poblacion potencial")
-    BDseguimiento <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1120700756",
-                                sheet = "seguimiento")
-    BDavances <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1496146068",
-                            sheet = "actividades y componentes")
-  
+  BDiniciativas0 <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0",
+                               sheet = "iniciativas")
+  BDregiones <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1288196927", 
+                           sheet="poblacion potencial")
+  BDseguimiento <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1120700756",
+                              sheet = "seguimiento")
+  BDavances <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1496146068",
+                          sheet = "actividades y componentes")
+    
     
     #funciona al colocar un nombre concreto
    
@@ -137,8 +134,34 @@ shinyServer(function(input, output) {
     
 ##cajitas de indicadores para la seccion del sidebar de indicadores por iniciativa.
     output$indTiempoTranscurrido <- renderInfoBox({
+      x <- input$Iniciativas
+      fechasIniciativa <- filter(BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x))
+      View(fechasIniciativa)
+      ddIniciativa <- select(fechasIniciativa, "Nombre Proyecto", "Fecha comienzo", "Fecha entrega")
+      View(ddIniciativa)
+      #mostrar solo 1 de los2 en caso de que exista mas de 1 // estos debe modificarse despues con el filtro del año
+      ddIniciativa2 <- ddIniciativa[1,]
+      View(ddIniciativa2)
+      fechaCom <- select(ddIniciativa2, "Fecha comienzo")
+      View(fechaCom)
+      fechaEnt <- select(ddIniciativa2, "Fecha entrega")
+      View(fechaEnt)
+      tpoTotal <- (fechaEnt- fechaCom)
+      View(tpoTotal)
+      fechaActual <- Sys.Date()
+      View(fechaActual)
+      tpoAvanzado <- (fechaActual - fechaCom)
+      View(tpoAvanzado)
+      
+      ##este calculo no lo hace
+        #Métodos incompatibles ("-.Date", "Ops.data.frame") para "-"
+        #Warning: Error in -: argumento no-numérico para operador binario 
+      indTpoTrans <- ((tpoAvanzado / tpoTotal)*100)
+      indTpoTrans2 <- round(indTpoTrans)
+      indTpoTrans3 <- str_c(indTpoTrans2, "%")
+      
         infoBox(
-            "Tiempo presupuestado transcurrido", "55%", icon = icon("fas fa-calendar-alt"),
+            "Tiempo presupuestado transcurrido", indTpoTrans3, icon = icon("fas fa-calendar-alt"),
             width = 4, color = "orange", fill = TRUE
         )
     })
@@ -177,8 +200,30 @@ shinyServer(function(input, output) {
         )
     })
     output$indAvanceComponentes <- renderInfoBox({
+      ##Fórmula de indicador comp actividades
+      #Obtengo los datos de las iniciativas
+      x <- input$Iniciativas
+      componentes <- filter(BDavances, str_detect (BDavances$`Nombre Proyecto`, x) == TRUE)
+      
+      #elimino duplicados en caso de que existan
+      componentes <- componentes[!duplicated(componentes),]
+      
+      #para componentes realizados
+      #selecciono el estado de los componentes
+      estadoComp <- select(componentes, "Componente", "Estado comp")
+      estadoComp2 <- distinct(estadoComp)
+      estadoComp3 <- select(estadoComp2, "Estado comp")
+      numCompTotales <- nrow(estadoComp2)
+      
+      compRealizados <- filter(estadoComp3, str_detect(estadoComp3$`Estado comp` , "entregado") == TRUE)
+      numCompRealizados <- nrow(compRealizados)
+      
+      indAvanceComp <- ((numCompRealizados/numCompTotales)*100)
+      indAvanceComp2 <- round(indAvanceComp, 2)
+      indAvanceComp3 <- str_c(indAvanceComp2, "%")
+
         infoBox(
-            "Avance según componentes", "63%", icon = icon("fas fa-clipboard-list"),
+            "Avance según componentes", indAvanceComp3, icon = icon("fas fa-clipboard-list"),
             width = 4, color = "blue", fill = TRUE
         )
     })
@@ -187,9 +232,9 @@ shinyServer(function(input, output) {
     #intento de indicador beneficiarios
     output$indBeneficiarios <- renderInfoBox({
       x <- input$Iniciativas
-      View(x)
+      
       benefIniciativas <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x) == TRUE) 
-      View(benefIniciativas)
+      
       benefObj <- select(benefIniciativas, "beneficiariosObjetivos")
       benefEfe <- select(benefIniciativas, "beneficiariosEfectivos")
       
