@@ -143,32 +143,34 @@ shinyServer(function(input, output) {
         )
     })
 
-    ##Fórmula de indicador avance actividades
-    #Obtengo los datos de las iniciativas
-    activ <- filter(BDavances, str_detect (BDavances$`Nombre Proyecto`, "Transferencia programa de fortalecimiento tecnológico para la industria"))
-  
-    #elimino duplicados en caso de que existan
-    activ <- activ[!duplicated(activ),]
-   
-      #para actividades realizadas
-    #selecciono el estado de las actividades
-    estadoAct <- select(activ, "Estado act")
-   
-    numActTotales <- nrow(estadoAct)
-    
-    actRealizadas <- filter(estadoAct, str_detect(activ$`Estado act`, "entregado") == TRUE)
-  
-    numActRealizadas <- nrow(actRealizadas)
  
-    
-  indAvanceAct <- ((numActRealizadas/numActTotales)*100)
-  indAvanceAct <- round(indAvanceAct, 2)
-  indAvanceAct <- str_c(indAvanceAct, "%")
 
     #para actividades atrasadas
    
     
     output$indAvanceActividades <- renderInfoBox({
+      ##Fórmula de indicador avance actividades
+      #Obtengo los datos de las iniciativas
+      x <- input$Iniciativas
+      activ <- filter(BDavances, str_detect (BDavances$`Nombre Proyecto`, x))
+      
+      #elimino duplicados en caso de que existan
+      activ <- activ[!duplicated(activ),]
+      
+      #para actividades realizadas
+      #selecciono el estado de las actividades
+      estadoAct <- select(activ, "Estado act")
+      
+      numActTotales <- nrow(estadoAct)
+      
+      actRealizadas <- filter(estadoAct, str_detect(activ$`Estado act`, "entregado") == TRUE)
+      
+      numActRealizadas <- nrow(actRealizadas)
+      
+      
+      indAvanceAct <- ((numActRealizadas/numActTotales)*100)
+      indAvanceAct <- round(indAvanceAct, 2)
+      indAvanceAct <- str_c(indAvanceAct, "%")
         infoBox(
             "Avance según actividades", indAvanceAct, icon = icon("fas fa-clipboard"),
             width = 4, color = "green", fill = TRUE
