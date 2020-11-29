@@ -91,14 +91,18 @@ shinyUI(dashboardPage(
                     
                     h2("Indicadores por iniciativa"),
                     fluidRow(
-                        box(selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
-                                        choices = unique(BDiniciativas0$`Nombre Proyecto`),
-                                        selected= unique(BDiniciativas0$`Nombre Proyecto`[1])
-                                        )
-                            
+                        box(
+                            #agrego el data input
+                            selectInput(
+                                inputId =  "Año", 
+                                label = "Seleccione el año de las iniciativas:", 
+                                choices = 2016:as.numeric(format(Sys.Date(),"%Y"))
+                                
+                            ),
+                            uiOutput("selecAño")
+                        
+                        
                             )
-                        
-                        
                     ),
                     
                     fluidRow(

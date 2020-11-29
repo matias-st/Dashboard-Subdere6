@@ -11,10 +11,17 @@ shinyServer(function(input, output) {
                           sheet = "actividades y componentes")
     
     
-    #funciona al colocar un nombre concreto
+
    
+  output$selecAño <- renderUI({
    
+     selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
+                choices = unique(BDiniciativas0[BDiniciativas0$`Año`== input$Año, "Nombre Proyecto"])
+                
+    )
+  })
     
+ 
 ##output$ind... envia al ui.R las cajas de todos de los indicadores que se ven en infobox.
     output$indIniciativasAtrasadasReg <- renderInfoBox({
         infoBox(
@@ -133,28 +140,41 @@ shinyServer(function(input, output) {
     output$iniciativax <- renderDataTable(BDiniciativas0)
     
 ##cajitas de indicadores para la seccion del sidebar de indicadores por iniciativa.
+    
     output$indTiempoTranscurrido <- renderInfoBox({
       x <- input$Iniciativas
+      
+      
       fechasIniciativa <- filter(BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x))
-      View(fechasIniciativa)
+      fechasIniciativa <- filter (fechasIniciativa, str_detect (fechasIniciativa$`Año`, y) == TRUE)
+      
+      #View(fechasIniciativa)
       ddIniciativa <- select(fechasIniciativa, "Nombre Proyecto", "Fecha comienzo", "Fecha entrega")
-      View(ddIniciativa)
-      #mostrar solo 1 de los2 en caso de que exista mas de 1 // estos debe modificarse despues con el filtro del año
-      ddIniciativa2 <- ddIniciativa[1,]
-      View(ddIniciativa2)
-      fechaCom <- select(ddIniciativa2, "Fecha comienzo")
-      View(fechaCom)
-      fechaEnt <- select(ddIniciativa2, "Fecha entrega")
-      View(fechaEnt)
+     # View(ddIniciativa)
+   
+      
+      #View(ddIniciativa2)
+      fechaCom <- select(ddIniciativa, "Fecha comienzo")
+      #View(fechaCom)
+      #str(fechaCom)
+      fechaEnt <- select(ddIniciativa, "Fecha entrega")
+      #View(fechaEnt)
       tpoTotal <- (fechaEnt- fechaCom)
-      View(tpoTotal)
-      fechaActual <- as.Date(Sys.Date())
+      #View(tpoTotal)
+      
+      #Lo calcula pero no manda errores igual, no hace bien los calculos posteriores
+      #creo que lo mejor sería pedir la fecha y usarla para comparar
+      #no funciona con el as.posixct
+      fechaActual <- as.POSi(Sys.Date())
       View(fechaActual)
+      
       ##este calculo no lo hace
       #Métodos incompatibles ("-.Date", "Ops.data.frame") para "-"
       #Warning: Error in -: argumento no-numérico para operador binario 
+      
+    #saque algo, no se que parte
       tpoAvanzado <- (fechaActual - fechaCom)
-      View(tpoAvanzado)
+      View(tpoAvas.POSIXct()
       
       indTpoTrans <- ((tpoAvanzado / tpoTotal)*100)
       indTpoTrans2 <- round(indTpoTrans)
@@ -175,7 +195,9 @@ shinyServer(function(input, output) {
       ##Fórmula de indicador avance actividades
       #Obtengo los datos de las iniciativas
       x <- input$Iniciativas
+      y <- input$Año
       activ <- filter(BDavances, str_detect (BDavances$`Nombre Proyecto`, x))
+      activ <- filter (activ, str_detect (activ$`Año`, y) == TRUE)
       
       #elimino duplicados en caso de que existan
       activ <- activ[!duplicated(activ),]
@@ -203,7 +225,9 @@ shinyServer(function(input, output) {
       ##Fórmula de indicador comp actividades
       #Obtengo los datos de las iniciativas
       x <- input$Iniciativas
+      y <- input$Año
       componentes <- filter(BDavances, str_detect (BDavances$`Nombre Proyecto`, x) == TRUE)
+      coponentes <- filter (componentes, str_detect (componentes$`Año`, y) == TRUE)
       
       #elimino duplicados en caso de que existan
       componentes <- componentes[!duplicated(componentes),]
@@ -232,8 +256,10 @@ shinyServer(function(input, output) {
     #intento de indicador beneficiarios
     output$indBeneficiarios <- renderInfoBox({
       x <- input$Iniciativas
+      y <- input$Año
       
-      benefIniciativas <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x) == TRUE) 
+      benefIniciativas <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x) == TRUE)
+      benefIniciativas <- filter (benefIniciativas, str_detect (benefIniciativas$`Año`, y) == TRUE)
       
       benefObj <- select(benefIniciativas, "beneficiariosObjetivos")
       benefEfe <- select(benefIniciativas, "beneficiariosEfectivos")
