@@ -143,7 +143,7 @@ shinyServer(function(input, output) {
     
     output$indTiempoTranscurrido <- renderInfoBox({
       x <- input$Iniciativas
-      
+      y <- input$Año
       
       fechasIniciativa <- filter(BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x))
       fechasIniciativa <- filter (fechasIniciativa, str_detect (fechasIniciativa$`Año`, y) == TRUE)
@@ -165,16 +165,18 @@ shinyServer(function(input, output) {
       #Lo calcula pero no manda errores igual, no hace bien los calculos posteriores
       #creo que lo mejor sería pedir la fecha y usarla para comparar
       #no funciona con el as.posixct
-      fechaActual <- as.POSi(Sys.Date())
+      fechaActual <- Sys.Date()
       View(fechaActual)
       
+      ###no pescar estos comentarios
       ##este calculo no lo hace
       #Métodos incompatibles ("-.Date", "Ops.data.frame") para "-"
       #Warning: Error in -: argumento no-numérico para operador binario 
-      
-    #saque algo, no se que parte
+   
+       #probando transformar el dato a date para poder hacer la resta  
+   fechaCom <- as.Date(fechaCom)
       tpoAvanzado <- (fechaActual - fechaCom)
-      View(tpoAvas.POSIXct()
+      
       
       indTpoTrans <- ((tpoAvanzado / tpoTotal)*100)
       indTpoTrans2 <- round(indTpoTrans)
