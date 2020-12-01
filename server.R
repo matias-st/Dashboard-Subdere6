@@ -133,17 +133,21 @@ shinyServer(function(input, output) {
     
     
     if(variableX == 1){
-    
-      ggplot(BDiniciativas0, aes(x = Destino, fill = Destino)) + 
+     
+      ggplot(BDiniciativas0, aes(x = reorder(Destino, -table(Destino)[Destino]), fill = Destino)) + 
         geom_bar() +
-      scale_x_discrete("Destinos") +     
-        scale_y_continuous("Frecuencia") 
+        facet_wrap(~Año, nrow = 1) +
+        scale_x_discrete("Destinos") +     
+        scale_y_continuous("Frecuencia") +
+        coord_flip()
+        
     } else {
       
-      ggplot(BDiniciativas0, aes(x = Sector, fill = Sector)) + 
+      ggplot(BDiniciativas0, aes(x = reorder(Sector, -table(Sector)[Sector]), fill = Sector)) + 
         geom_bar() +
       scale_x_discrete("Sectores") +    
-        scale_y_continuous("Frecuencia") 
+        scale_y_continuous("Frecuencia") +
+        coord_flip()
     }
       
         
