@@ -11,8 +11,7 @@ shinyServer(function(input, output) {
                           sheet = "actividades y componentes")
     
     
-
-   
+  
   output$selecAño <- renderUI({
    
      selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
@@ -126,13 +125,27 @@ shinyServer(function(input, output) {
                 col = "darkslategray3", las =2, cex.names = 0.7)
     })
     
-    Porcentaje<- (BDregiones$PP16 / BDregiones$Población_Total)*100
-    output$pPotencial <- renderPlot({
+    
+    output$varX <- renderPlot({
         
-        ggplot(data=BDregiones, aes(x= Región, y= Porcentaje, fill= Región)) + 
-            geom_bar(stat="identity", position="stack") +
-            scale_x_discrete("Regiones") +
-            scale_fill_manual(values=c("#CC0000","#FF6633","#CC9900","#996633","#FFFF33","#009900","#66FF66","#336666","#009999","#0033FF","3366FF","#000099","#FF66FF","#660099","#990066"))
+    variableX <-input$varSeleccionada
+    View(variableX)
+    
+    
+    if(variableX == 1){
+    
+      ggplot(BDiniciativas0, aes(x = Destino, fill = Destino)) + 
+        geom_bar() +
+      scale_x_discrete("Destinos") +     
+        scale_y_continuous("Frecuencia") 
+    } else {
+      
+      ggplot(BDiniciativas0, aes(x = Sector, fill = Sector)) + 
+        geom_bar() +
+      scale_x_discrete("Sectores") +    
+        scale_y_continuous("Frecuencia") 
+    }
+      
         
     })
     
@@ -144,14 +157,17 @@ shinyServer(function(input, output) {
     output$indTiempoTranscurrido <- renderInfoBox({
       x <- input$Iniciativas
       y <- input$Año
+      comienzoIni <- input$comienzoIni
       
       fechasIniciativa <- filter(BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x))
       fechasIniciativa <- filter (fechasIniciativa, str_detect (fechasIniciativa$`Año`, y) == TRUE)
       
+    
+      
       #View(fechasIniciativa)
       ddIniciativa <- select(fechasIniciativa, "Nombre Proyecto", "Fecha comienzo", "Fecha entrega")
-     # View(ddIniciativa)
-   
+      # View(ddIniciativa)
+      
       
       #View(ddIniciativa2)
       fechaCom <- select(ddIniciativa, "Fecha comienzo")
@@ -160,7 +176,7 @@ shinyServer(function(input, output) {
       fechaEnt <- select(ddIniciativa, "Fecha entrega")
       #View(fechaEnt)
       tpoTotal <- (fechaEnt- fechaCom)
-      #View(tpoTotal)
+      View(tpoTotal)
       
       #Lo calcula pero no manda errores igual, no hace bien los calculos posteriores
       #creo que lo mejor sería pedir la fecha y usarla para comparar
@@ -172,20 +188,35 @@ shinyServer(function(input, output) {
       ##este calculo no lo hace
       #Métodos incompatibles ("-.Date", "Ops.data.frame") para "-"
       #Warning: Error in -: argumento no-numérico para operador binario 
-   
-       #probando transformar el dato a date para poder hacer la resta  
-   fechaCom <- as.Date(fechaCom)
-      tpoAvanzado <- (fechaActual - fechaCom)
       
+      #probando transformar el dato a date para poder hacer la resta  
+      ##no se puede transformar el fechaCom con as.Date
+      #as.character + as.date tampoco sirve
       
-      indTpoTrans <- ((tpoAvanzado / tpoTotal)*100)
+      View(fechaCom)
+      
+      tpoAvanzado <- (fechaActual - comienzoIni)
+      View(tpoAvanzado)
+      
+      tpoTotal2 <- as.numeric(tpoTotal)
+      View(tpoTotal2)
+      indTpoTrans <- ((tpoAvanzado / tpoTotal2)*100)
       indTpoTrans2 <- round(indTpoTrans)
       indTpoTrans3 <- str_c(indTpoTrans2, "%")
       
+      if(is.null( input$comienzoIni)) {
         infoBox(
-            "Tiempo presupuestado transcurrido", indTpoTrans3, icon = icon("fas fa-calendar-alt"),
-            width = 4, color = "orange", fill = TRUE
+          "Tiempo presupuestado transcurrido","Ingrese la fecha de comienzo de la iniciativa", icon = icon("fas fa-calendar-alt"),
+          width = 4, color = "orange", fill = TRUE
         )
+      } else {
+        #aca va indTpoTrans3
+        infoBox(
+          "Tiempo presupuestado transcurrido",  "30%", icon = icon("fas fa-calendar-alt"),
+          width = 4, color = "orange", fill = TRUE
+        )
+      }
+      
     })
 
  

@@ -44,7 +44,7 @@ shinyUI(dashboardPage(
             h2("Seguimiento iniciativas FIC-R Region"),
             fluidRow(
                 box(h2("Regional")),
-                box(h2("Nacional")),
+                box(h2("Nacional"))
             ),
             
             fluidRow(
@@ -61,7 +61,7 @@ shinyUI(dashboardPage(
             ),
             
             fluidRow(
-                h2("Graficos"),
+                h2("Graficos")
             ),
         
             fluidRow(
@@ -73,13 +73,19 @@ shinyUI(dashboardPage(
         
             "\n",
             fluidRow(
-                box(title= "Población Potencial respecto del total de habitantes por Región", status= "primary", solidHeader = TRUE,width = 12,
-                    plotOutput("pPotencial"))
+                
+               box( radioButtons("varSeleccionada", h4("Seleccione la variable X del gráfico"),
+                             choices = list("Destino" = 1, "Sector" = 2),
+                             selected = 1),
+               ),
+                box(title= "Frecuencia de la variable seleccionada", status= "primary", solidHeader = TRUE,width = 12,
+                    plotOutput("varX"))
             
             ),
         
+            "\n",
             fluidRow(
-                h2("Todas las iniciativas"),
+                h2("Todas las iniciativas")
             ),
         
             fluidRow(
@@ -90,7 +96,8 @@ shinyUI(dashboardPage(
             tabItem(tabName = "iniciativas",
                     
                     h2("Indicadores por iniciativa"),
-                    fluidRow(
+                   
+                     fluidRow(
                         box(
                             #agrego el data input
                             selectInput(
@@ -103,6 +110,17 @@ shinyUI(dashboardPage(
                         
                         
                             )
+                              ),
+                    
+                    fluidRow(
+                        box(
+                            #agrego el data input
+                            dateInput("comienzoIni", "Fecha de comienzo de la iniciativa:",
+                                      value = "2016-01-01",
+                                      min = "2016-01-01",
+                                      max = Sys.Date()
+                            )
+                        )
                     ),
                     
                     fluidRow(
