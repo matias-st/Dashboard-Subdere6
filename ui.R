@@ -1,14 +1,3 @@
-##Se cargan las librerias para utilizar sus funciones
-library(shiny)
-library(shinydashboard)
-library(ggplot2)
-library(plotly)
-library(shiny)
-library(readxl)
-library(googledrive)
-library(googlesheets4)
-library(tidyverse)
-
 ##ShinyUI muestra la parte visual de la pagina, y dashboardPage presenta el dashboard
 shinyUI(dashboardPage(
 
@@ -31,7 +20,7 @@ shinyUI(dashboardPage(
         
             tabItem(tabName = "inicio",
         
-            h2("Seguimiento iniciativas FIC-R Region"),
+            h2("Seguimiento iniciativas FIC-R Región"),
             fluidRow(
                 box(h2("Regional")),
                 box(h2("Nacional")),
@@ -73,7 +62,7 @@ shinyUI(dashboardPage(
             ),
         
             fluidRow(
-                dataTableOutput("iniciativax")
+                dataTableOutput("tablaIniciativa")
             )
             ),
             
@@ -81,10 +70,18 @@ shinyUI(dashboardPage(
                     
                     h2("Indicadores por iniciativa"),
                     fluidRow(
-                        box(selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
-                                        choices = unique("lista nombres iniciativas")
-                                        )
-                            )
+                        box(
+                            #agrego el data input
+                            selectInput(
+                                inputId =  "Año", 
+                                label = "Seleccione el año de las iniciativas:", 
+                                choices = 2016:as.numeric(format(Sys.Date(),"%Y"))
+                                
+                            ),
+                            uiOutput("selecAño")
+                            
+                            
+                        )
                     ),
                     
                     fluidRow(
@@ -98,7 +95,6 @@ shinyUI(dashboardPage(
                     fluidRow(
                         dataTableOutput("iniciativa1")
                     )
-                    
                     
             )
           
