@@ -27,6 +27,17 @@ shinyUI(dashboardPage(
                     ),
                     
                     fluidRow(
+                        box(
+                            #agrego el data input
+                            selectInput(
+                                inputId =  "añoGlobal", 
+                                label = "Seleccione el año de los indicadores:", 
+                                choices = 2016:as.numeric(format(Sys.Date(),"%Y"))
+                            )
+                        )
+                    ),
+                    
+                    fluidRow(
                         infoBoxOutput("indIniciativasAtrasadasReg", width = 6),
                         infoBoxOutput("indIniciativasAtrasadasNac", width = 6),
                         infoBoxOutput("indSectorPriorizadoReg", width = 6),
@@ -51,11 +62,6 @@ shinyUI(dashboardPage(
                     ),
                     
                     "\n",
-                    fluidRow(
-                        box(title= "Población Potencial respecto del total de habitantes por Región", status= "primary", solidHeader = TRUE,width = 12,
-                            plotOutput("pPotencial"))
-                        
-                    ),
                     
                     fluidRow(
                         h2("Todas las iniciativas"),

@@ -3,7 +3,9 @@ shinyServer(function(input, output) {
   
   ##Indicadores que se ven en forma de infobox.
   output$indIniciativasAtrasadasReg <- renderInfoBox({
+    añoGlob <- input$añoGlobal
     iniciativasAtrasadas <- filter(BDactividades, actAtrasada == "atrasado")
+    iniciativasAtrasadas <- filter (iniciativasAtrasadas, str_detect (iniciativasAtrasadas$Año, añoGlob) == TRUE)
     numeroIniciativasAtrasadas <- nrow(iniciativasAtrasadas)
     indIniciativasAtrasadas <- (numeroIniciativasAtrasadas/numeroIniciativasTotales)*100
     aproximacionInicAtras <- round(indIniciativasAtrasadas, 2)
@@ -14,7 +16,9 @@ shinyServer(function(input, output) {
     )
   })
   output$indIniciativasAtrasadasNac <- renderInfoBox({
-    indIniciativasAtrasadasNacional <- mean(BDnacional$'Iniciativas atrasadas')
+    añoGlob <- input$añoGlobal
+    iniciativasAtrasadasNac <- filter (BDactividades, str_detect (BDactividades$Año, añoGlob) == TRUE)
+    indIniciativasAtrasadasNacional <- mean(iniciativasAtrasadasNac$'Iniciativas atrasadas')
     aproximacionInicAtrasNac <- round(indIniciativasAtrasadasNacional, 2)
     porcentajeInicAtrasNac <- str_c( aproximacionInicAtrasNac, "%")
     infoBox(
@@ -43,8 +47,6 @@ shinyServer(function(input, output) {
     )
   })
   output$indCrecimientoSPReg <- renderInfoBox({
-    añoActual <- max(BDiniciativas0$Año)
-    añoAnterior <- añoActual - 1
     iniciativasSectPrioAñoActual <- filter(BDiniciativas0, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
     iniciativasSectPrioAñoAnterior <- filter(BDiniciativas0, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
@@ -127,14 +129,7 @@ shinyServer(function(input, output) {
             xlab = "", ylab = "Proporción", ylim = c(0, 0.3),
             col = "darkslategray3", las =2, cex.names = 0.7)
   })
-  output$pPotencial <- renderPlot({
-    Porcentaje<- (BDregiones$PP16 / BDregiones$Población_Total)*100
-    ggplot(data=BDregiones, aes(x= Región, y= Porcentaje, fill= Región)) + 
-      geom_bar(stat="identity", position="stack") +
-      scale_x_discrete("Regiones") +
-      scale_fill_manual(values=c("#CC0000","#FF6633","#CC9900","#996633","#FFFF33","#009900","#66FF66","#336666","#009999","#0033FF","3366FF","#000099","#FF66FF","#660099","#990066"))
-    
-  })
+
   
   ##se envia al ui.R la tabla interactiva de iniciativas con el nombre de iniciativax
   output$tablaIniciativa <- renderDataTable(BDiniciativas0)
