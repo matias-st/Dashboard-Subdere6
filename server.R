@@ -2,6 +2,7 @@
 shinyServer(function(input, output) {
   
   ##Indicadores que se ven en forma de infobox.
+  
   output$indIniciativasAtrasadasReg <- renderInfoBox({
     añoGlob <- input$añoGlobal
     iniciativasAtrasadas <- filter(BDactividades, actAtrasada == "atrasado")
@@ -16,9 +17,11 @@ shinyServer(function(input, output) {
     )
   })
   output$indIniciativasAtrasadasNac <- renderInfoBox({
-    añoGlob <- input$añoGlobal
-    iniciativasAtrasadasNac <- filter (BDactividades, str_detect (BDactividades$Año, añoGlob) == TRUE)
-    indIniciativasAtrasadasNacional <- mean(iniciativasAtrasadasNac$'Iniciativas atrasadas')
+    # añoGlob <- input$añoGlobal
+    # View(añoGlob)
+    # iniciativasAtrasadasNac <- filter (BDactividades, str_detect (BDactividades$Año, añoGlob) == TRUE)
+    # View(iniciativasAtrasadasNac)
+    indIniciativasAtrasadasNacional <- mean(BDnacional$'Iniciativas atrasadas')
     aproximacionInicAtrasNac <- round(indIniciativasAtrasadasNacional, 2)
     porcentajeInicAtrasNac <- str_c( aproximacionInicAtrasNac, "%")
     infoBox(
@@ -27,7 +30,9 @@ shinyServer(function(input, output) {
     )
   })
   output$indSectorPriorizadoReg <- renderInfoBox({
+    añoGlob <- input$añoGlobal
     iniciativasSectorPriorizado <- filter(BDiniciativas0, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    iniciativasSectorPriorizado <- filter (iniciativasSectorPriorizado, str_detect (iniciativasSectorPriorizado$Año, añoGlob) == TRUE)
     numeroIniciativasSectPr <- nrow(iniciativasSectorPriorizado)
     indSecPriorizado <- (numeroIniciativasSectPr/numeroIniciativasTotales)*100
     aproximacionSecPriorizado <- round(indSecPriorizado, 2)
@@ -46,6 +51,8 @@ shinyServer(function(input, output) {
       width = 6, color = "green", fill = TRUE
     )
   })
+  
+  #este probablemente se pueda trabajar con el añoGlobal
   output$indCrecimientoSPReg <- renderInfoBox({
     iniciativasSectPrioAñoActual <- filter(BDiniciativas0, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
@@ -70,9 +77,14 @@ shinyServer(function(input, output) {
       width = 6, color = "blue", fill = TRUE
     )
   })
-  output$indBeneficiariosReg <- renderInfoBox({
-    sumaBenefObjetivos <- colSums (BDseguimiento[ , 6])
-    sumaBenefEfectivos <- colSums (BDseguimiento[ , 7])
+  #no reconoce el benefAño
+    output$indBeneficiariosReg <- renderInfoBox({
+    añoGlob <- input$añoGlobal
+    benefAño <- filter (BDseguimiento, str_detect (BDseguimiento$Año, añoGlob) == TRUE)
+    
+    #corrección del colSums
+    sumaBenefObjetivos <- colSums (benefAño[ , 6, drop = FALSE])
+    sumaBenefEfectivos <- colSums (benefAño[ , 7, drop = FALSE])
     indBenefEfectivos <- (sumaBenefEfectivos/sumaBenefObjetivos)*100
     aproximacionBenefEfectivos <- round(indBenefEfectivos, 2)
     porcentajeBenefEfectivos <- str_c( aproximacionBenefEfectivos, "%")
@@ -90,6 +102,7 @@ shinyServer(function(input, output) {
       width = 6, color = "yellow", fill = TRUE
     )
   })
+  #este también podría trabajarse con el añoGlobal
   output$indCrecimientoBenefReg <- renderInfoBox({
     iniciativasAñoActual <- filter(BDseguimiento, Año == añoActual)
     iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnterior)
@@ -130,6 +143,34 @@ shinyServer(function(input, output) {
             col = "darkslategray3", las =2, cex.names = 0.7)
   })
 
+  output$varX <- renderPlot({
+    
+    variableX <-input$varSeleccionada
+    View(variableX)
+    añoGlob <- input$añoGlobal
+    añoGraf <- filter (BDiniciativas0, str_detect (BDiniciativas0$Año, añoGlob) == TRUE)
+  
+    if(variableX == 1){
+      
+      ggplot(añoGraf, aes(x = reorder(Destino, -table(Destino)[Destino]), fill = Destino)) + 
+        geom_bar() +
+        
+        #facet_wrap(~Año, nrow = 1) +
+        scale_x_discrete("Destinos") +     
+        scale_y_continuous("Frecuencia") +
+        coord_flip()
+      
+    } else {
+      
+      ggplot(añoGraf, aes(x = reorder(Sector, -table(Sector)[Sector]), fill = Sector)) + 
+        geom_bar() +
+        scale_x_discrete("Sectores") +    
+        scale_y_continuous("Frecuencia") +
+        coord_flip()
+    }
+    
+    
+  })
   
   ##se envia al ui.R la tabla interactiva de iniciativas con el nombre de iniciativax
   output$tablaIniciativa <- renderDataTable(BDiniciativas0)

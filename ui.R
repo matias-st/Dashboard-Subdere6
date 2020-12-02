@@ -8,9 +8,19 @@ shinyUI(dashboardPage(
     dashboardSidebar(
         sidebarMenu(id = 'sidebarmenu',
                     menuItem("Estadisticas Región", tabName = "inicio"),
-                    menuSubItem("Indicadores por iniciativa", tabName = "iniciativas")
+                    menuSubItem("Indicadores por iniciativa",tabName = "iniciativas")
                     
-        )
+        ),
+        #prueba de sidebarpanel
+        
+            selectInput(
+                inputId =  "añoGlobal", 
+                label = "Seleccione el año de los indicadores:", 
+                choices = 2016:as.numeric(format(Sys.Date(),"%Y")),
+                selected = 2016
+            )
+            
+        
     ),
     
     ##dashboardBody muestra el cuerpo de la pagina
@@ -25,18 +35,7 @@ shinyUI(dashboardPage(
                         box(h2("Regional")),
                         box(h2("Nacional")),
                     ),
-                    
-                    fluidRow(
-                        box(
-                            #agrego el data input
-                            selectInput(
-                                inputId =  "añoGlobal", 
-                                label = "Seleccione el año de los indicadores:", 
-                                choices = 2016:as.numeric(format(Sys.Date(),"%Y"))
-                            )
-                        )
-                    ),
-                    
+                   
                     fluidRow(
                         infoBoxOutput("indIniciativasAtrasadasReg", width = 6),
                         infoBoxOutput("indIniciativasAtrasadasNac", width = 6),
@@ -62,6 +61,17 @@ shinyUI(dashboardPage(
                     ),
                     
                     "\n",
+                    
+                    fluidRow(
+                        
+                        box( radioButtons("varSeleccionada", h4("Seleccione la variable X del gráfico"),
+                                          choices = list("Destino" = 1, "Sector" = 2),
+                                          selected = 1),
+                        ),
+                        box(title= "Frecuencia de la variable seleccionada", status= "primary", solidHeader = TRUE,width = 12,
+                            plotOutput("varX"))
+                        
+                    ),
                     
                     fluidRow(
                         h2("Todas las iniciativas"),
