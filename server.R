@@ -186,8 +186,13 @@ shinyServer(function(input, output) {
   
   ##cajitas de indicadores para la seccion del sidebar de indicadores por iniciativa.
   output$indTiempoTranscurrido <- renderInfoBox({
+    x <- input$Iniciativas
+    y <- input$Año
+    activ <- filter(BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x))
+    activ <- filter(activ, str_detect (activ$`Año`, y) == TRUE)
+    activ <- select(activ, "Fecha entrega")
     infoBox(
-      "Tiempo presupuestado transcurrido", "55%", icon = icon("fas fa-calendar-alt"),
+      "Fecha entrega iniciativa", activ, icon = icon("fas fa-calendar-alt"),
       width = 4, color = "orange", fill = TRUE
     )
   })
