@@ -177,9 +177,9 @@ shinyServer(function(input, output) {
   
   
   output$selecAño <- renderUI({
-    
+    añoGlob <- input$añoGlobal
     selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
-                choices = unique(BDiniciativas0[BDiniciativas0$`Año`== input$Año, "Nombre Proyecto"])
+                choices = unique(BDiniciativas0[BDiniciativas0$`Año`== añoGlob, "Nombre Proyecto"])
                 
     )
   })
@@ -195,7 +195,7 @@ shinyServer(function(input, output) {
     ##Fórmula de indicador avance actividades
     #Obtengo los datos de las iniciativas
     x <- input$Iniciativas
-    y <- input$Año
+    y <- input$añoGlobal
     activ <- filter(BDactividades, str_detect (BDactividades$`Nombre Proyecto`, x))
     activ <- filter (activ, str_detect (activ$`Año`, y) == TRUE)
     #elimino duplicados en caso de que existan
@@ -218,7 +218,7 @@ shinyServer(function(input, output) {
     ##Fórmula de indicador comp actividades
     #Obtengo los datos de las iniciativas
     x <- input$Iniciativas
-    y <- input$Año
+    y <- input$añoGlobal
     componentes <- filter(BDactividades, str_detect (BDactividades$`Nombre Proyecto`, x) == TRUE)
     coponentes <- filter (componentes, str_detect (componentes$`Año`, y) == TRUE)
     
@@ -246,7 +246,7 @@ shinyServer(function(input, output) {
   })
   output$indBeneficiarios <- renderInfoBox({
     x <- input$Iniciativas
-    y <- input$Año
+    y <- input$añoGlobal
     
     benefIniciativas <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x) == TRUE)
     benefIniciativas <- filter (benefIniciativas, str_detect (benefIniciativas$`Año`, y) == TRUE)
