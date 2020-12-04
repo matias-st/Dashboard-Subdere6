@@ -6,7 +6,7 @@ shinyUI(dashboardPage(
     
     ##dashboardSidebar muestra el menu lateral de la pagina
     dashboardSidebar(
-        sidebarMenu(id = 'sidebarmenu',
+               sidebarMenu(id = 'sidebarmenu', 
                     menuItem("Estadisticas Región", tabName = "inicio"),
                     menuSubItem("Indicadores por iniciativa",tabName = "iniciativas")
                     
@@ -84,7 +84,7 @@ shinyUI(dashboardPage(
                     ),
                     
                     fluidRow(
-                        dataTableOutput("tablaIniciativa")
+                        div ( style  =  ' overflow-x: scroll ' , dataTableOutput("tablaIniciativa"))
                     )
             ),
             
@@ -108,7 +108,7 @@ shinyUI(dashboardPage(
                     ),
                     
                     fluidRow(
-                        dataTableOutput("iniciativa1")
+                        div ( style  =  ' overflow-x: scroll ' , dataTableOutput("iniciativa1"))
                     )
                     
             )
