@@ -54,9 +54,11 @@ shinyUI(dashboardPage(
                     ),
                     
                     fluidRow(
-                        box(title = "Ejecutor público vs privado", status = "primary", solidHeader = TRUE,
-                            plotOutput("ejecutorPublicoVsPrivado")),
-                        box(title = "Iniciativas por sector", status = "primary", solidHeader = TRUE,
+                        box(title = "Ejecutor público vs privado", status = "primary", solidHeader = TRUE, width = 12,
+                            plotOutput("ejecutorPublicoVsPrivado"))
+                    ),
+                    fluidRow(
+                        box(title = "Iniciativas por sector", status = "primary", solidHeader = TRUE, width = 12,
                             plotOutput("iniciativasPorSector"))
                     ),
                     

@@ -1,4 +1,4 @@
-##Se cargan las librerias para utilizar sus funciones
+##ee cargan las librerias para utilizar sus funciones
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
@@ -9,16 +9,19 @@ library(googlesheets4)
 library(tidyverse)
 library(stringr)
 
-##con read_sheet() se lee el excel desde google drive con el link, sheet es igual a la hoja que se esta cargando.
-BDiniciativas0 <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0%22",
+##con read_sheet() se lee el excel desde google drive con el link, sheet es igual a la hoja que se esta cargando
+BDiniciativas <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI",
                              sheet = "iniciativas")
-BDseguimiento <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1120700756", 
+BDseguimiento <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI", 
                              sheet = "seguimiento")
-BDactividades <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=1120700756", 
+BDactividades <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI", 
                              sheet = "actividades y componentes")
-BDnacional <- read_sheet("https://docs.google.com/spreadsheets/d/1IpawWdpO8MUhw3kALmePGO5yipD4yTT1HHBUJ0dAVEA/edit#gid=0", 
+BDnacional <- read_sheet("https://docs.google.com/spreadsheets/d/1IpawWdpO8MUhw3kALmePGO5yipD4yTT1HHBUJ0dAVEA", 
                              sheet = "Indicadores Regionales")
 
-numeroIniciativasTotales <- nrow(BDiniciativas0)
-añoActual <- max(BDiniciativas0$Año)
+##con nrow() se cuenta el numero total de iniciativas
+numeroIniciativasTotales <- nrow(BDiniciativas)
+##con max() se obtiene el año mas alto de las iniciativas
+añoActual <- max(BDiniciativas$Año)
+##en añoAnterior se guarda el año anterior al año actual
 añoAnterior <- añoActual - 1
