@@ -18,8 +18,12 @@ shinyUI(dashboardPage(
                 label = "Seleccione el año de los indicadores:", 
                 choices = 2016:as.numeric(format(Sys.Date(),"%Y")),
                 selected = 2016
-            )
-            
+            ),
+        
+        tags$div(class="header", checked=NA,
+             tags$p("    ¿Quieres acceder a la BD?"),
+             tags$a(href="https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0", "        Base de Datos") #no estoy seguro de que me haga el salto de espacio en la "Base de Datos"
+        )
         
     ),
     
