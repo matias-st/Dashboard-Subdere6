@@ -31,7 +31,7 @@ shinyServer(function(input, output) {
   })
   output$indSectorPriorizadoReg <- renderInfoBox({
     añoGlob <- input$añoGlobal
-    iniciativasSectorPriorizado <- filter(BDiniciativas, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    iniciativasSectorPriorizado <- filter(BDiniciativas0, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     iniciativasSectorPriorizado <- filter (iniciativasSectorPriorizado, str_detect (iniciativasSectorPriorizado$Año, añoGlob) == TRUE)
     numeroIniciativasSectPr <- nrow(iniciativasSectorPriorizado)
     indSecPriorizado <- (numeroIniciativasSectPr/numeroIniciativasTotales)*100
@@ -51,13 +51,14 @@ shinyServer(function(input, output) {
       width = 6, color = "green", fill = TRUE
     )
   })
+  
   #este probablemente se pueda trabajar con el añoGlobal
   output$indCrecimientoSPReg <- renderInfoBox({
-    iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    iniciativasSectPrioAñoActual <- filter(BDiniciativas0, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
-    iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    iniciativasSectPrioAñoAnterior <- filter(BDiniciativas0, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     numeroIniciativasSectPrAñoAnterior <- nrow(iniciativasSectPrioAñoAnterior)
-    totalIniciativasAñoAnterior <- filter(BDiniciativas, Año == añoAnterior)
+    totalIniciativasAñoAnterior <- filter(BDiniciativas0, Año == añoAnterior)
     numeroIniciativasAñoAnterior <- nrow(totalIniciativasAñoAnterior)
     indCrecSecPriorizado <- ((numeroIniciativasSectPrAñoActual-numeroIniciativasSectPrAñoAnterior)/numeroIniciativasAñoAnterior)*100
     aproximacionCrecSecPriorizado <- round(indCrecSecPriorizado, 2)
@@ -126,32 +127,28 @@ shinyServer(function(input, output) {
   })
   
   ##con los siguientes 3 output$... se envian al ui.R los gráficos de barra.
+  
   output$ejecutorPublicoVsPrivado <- renderPlot({
-    tablaEjecutor <- table(BDiniciativas$`Tipo Ejecutor`)
-    tablaEjecutor <- BDiniciativas[,3]
-    ggplot(tablaEjecutor, aes(x = reorder(TipoEjecutor, -table(TipoEjecutor)[TipoEjecutor]), fill = TipoEjecutor)) + 
-      geom_bar() +
-      
-      #facet_wrap(~Año, nrow = 1) +
-      scale_x_discrete("Tipo Ejecutor") +     
-      scale_y_continuous("Frecuencia") +
-      coord_flip()
+    tablaEjecutor <- table(BDiniciativas0$`Tipo Ejecutor`)
+    tablaEjecutor <- prop.table(tablaEjecutor)
+    barplot(tablaEjecutor,
+            xlab = "Tipo de ejecutor", ylab = "Proporción", ylim = c(0, 0.6), 
+            col = c("royalblue", "lightblue"))
   })
   output$iniciativasPorSector <- renderPlot({
-    tablaSector <- BDiniciativas[,8]
-    ggplot(tablaSector, aes(x = reorder(Sector, -table(Sector)[Sector]), fill = Sector)) + 
-      geom_bar() +
-      
-      #facet_wrap(~Año, nrow = 1) +
-      scale_x_discrete("Sector") +     
-      scale_y_continuous("Frecuencia") +
-      coord_flip()
+    tablaSector <- table(BDiniciativas0$Sector)
+    tablaSector <- prop.table(tablaSector)
+    barplot(tablaSector,
+            xlab = "", ylab = "Proporción", ylim = c(0, 0.3),
+            col = "darkslategray3", las =2, cex.names = 0.7)
   })
+
   output$varX <- renderPlot({
     
     variableX <-input$varSeleccionada
+    View(variableX)
     añoGlob <- input$añoGlobal
-    añoGraf <- filter (BDiniciativas, str_detect (BDiniciativas$Año, añoGlob) == TRUE)
+    añoGraf <- filter (BDiniciativas0, str_detect (BDiniciativas0$Año, añoGlob) == TRUE)
   
     if(variableX == 1){
       
@@ -176,12 +173,13 @@ shinyServer(function(input, output) {
   })
   
   ##se envia al ui.R la tabla interactiva de iniciativas con el nombre de iniciativax
-  output$tablaIniciativa <- renderDataTable(BDiniciativas)
+  output$tablaIniciativa <- renderDataTable(BDiniciativas0)
+  
   
   output$selecAño <- renderUI({
-    
+    añoGlob <- input$añoGlobal
     selectInput(inputId = "Iniciativas", label = "Iniciativas:", 
-                choices = unique(BDiniciativas[BDiniciativas$`Año`== input$Año, "Nombre Proyecto"])
+                choices = unique(BDiniciativas0[BDiniciativas0$`Año`== añoGlob, "Nombre Proyecto"])
                 
     )
   })
@@ -202,7 +200,7 @@ shinyServer(function(input, output) {
     ##Fórmula de indicador avance actividades
     #Obtengo los datos de las iniciativas
     x <- input$Iniciativas
-    y <- input$Año
+    y <- input$añoGlobal
     activ <- filter(BDactividades, str_detect (BDactividades$`Nombre Proyecto`, x))
     activ <- filter (activ, str_detect (activ$`Año`, y) == TRUE)
     #elimino duplicados en caso de que existan
@@ -225,7 +223,7 @@ shinyServer(function(input, output) {
     ##Fórmula de indicador comp actividades
     #Obtengo los datos de las iniciativas
     x <- input$Iniciativas
-    y <- input$Año
+    y <- input$añoGlobal
     componentes <- filter(BDactividades, str_detect (BDactividades$`Nombre Proyecto`, x) == TRUE)
     coponentes <- filter (componentes, str_detect (componentes$`Año`, y) == TRUE)
     
@@ -253,7 +251,7 @@ shinyServer(function(input, output) {
   })
   output$indBeneficiarios <- renderInfoBox({
     x <- input$Iniciativas
-    y <- input$Año
+    y <- input$añoGlobal
     
     benefIniciativas <- filter (BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x) == TRUE)
     benefIniciativas <- filter (benefIniciativas, str_detect (benefIniciativas$`Año`, y) == TRUE)
