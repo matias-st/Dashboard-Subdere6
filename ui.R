@@ -5,13 +5,15 @@ shinyUI(dashboardPage(
     dashboardHeader(title = "Seguimiento técnico FIC-R"),
     
     ##dashboardSidebar muestra el menu lateral de la pagina
-    dashboardSidebar(
+    dashboardSidebar(div ( style  =  ' overflow-y: scroll ' ),
                sidebarMenu(id = 'sidebarmenu', 
-                    menuItem("Estadisticas Región", tabName = "inicio"),
-                    menuSubItem("Indicadores por iniciativa",tabName = "iniciativas")
+                    menuItem("Estadisticas Región", tabName = "inicio", icon = icon("fas fa-user-circle")),
+                    menuSubItem("Indicadores por iniciativa",tabName = "iniciativas", icon = icon("fas fa-user"))
                     
         ),
         #prueba de sidebarpanel
+        br(),
+       
         
             selectInput(
                 inputId =  "añoGlobal", 
@@ -19,11 +21,23 @@ shinyUI(dashboardPage(
                 choices = 2016:as.numeric(format(Sys.Date(),"%Y")),
                 selected = 2016
             ),
+        br(),
+        br(),
+        br(),
         
         tags$div(class="header", checked=NA,
              tags$p("    ¿Quieres acceder a la BD?"),
              tags$a(href="https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0", "        Base de Datos") #no estoy seguro de que me haga el salto de espacio en la "Base de Datos"
-        )
+        ),
+        br(),
+        br(),
+        br(),
+        br(),
+        br(),
+        br(),
+        br(),
+        br(),
+        img(src="subdere.jpg", height=120, width=120)
         
     ),
     
