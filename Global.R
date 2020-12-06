@@ -1,4 +1,4 @@
-##ee cargan las librerias para utilizar sus funciones
+##Se cargan las librerias para utilizar sus funciones
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
@@ -19,9 +19,8 @@ BDactividades <- read_sheet("https://docs.google.com/spreadsheets/d/1QkMjIkeZgyC
 BDnacional <- read_sheet("https://docs.google.com/spreadsheets/d/1IpawWdpO8MUhw3kALmePGO5yipD4yTT1HHBUJ0dAVEA", 
                              sheet = "Indicadores Regionales")
 
-##con nrow() se cuenta el numero total de iniciativas
+##con nrow() se cuenta el numero total de filas de BDiniciativas
+##con max() se obtiene el año mas alto de BDiniciativas
 numeroIniciativasTotales <- nrow(BDiniciativas)
-##con max() se obtiene el año mas alto de las iniciativas
 añoActual <- max(BDiniciativas$Año)
-##en añoAnterior se guarda el año anterior al año actual
 añoAnterior <- añoActual - 1

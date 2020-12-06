@@ -2,9 +2,10 @@
 shinyUI(dashboardPage(
     
     ##dashboardHeader muestra el encabezado del dashboard
-    dashboardHeader(title = "Seguimiento técnico FIC-R"),
+    dashboardHeader(title = "Seguimiento técnico"),
     
     ##dashboardSidebar muestra el menu lateral de la pagina
+
     dashboardSidebar(div ( style  =  ' overflow-y: scroll ' ),
                sidebarMenu(id = 'sidebarmenu', 
                     menuItem("Estadisticas Región", tabName = "inicio", icon = icon("fas fa-user-circle")),
@@ -15,12 +16,21 @@ shinyUI(dashboardPage(
         br(),
        
         
+
+    dashboardSidebar(
+            sidebarMenu(id = 'sidebarmenu', 
+                    menuItem("Estadisticas Región", tabName = "estadisticasRegion"),
+                    menuSubItem("Indicadores por iniciativa",tabName = "indicadoresPorIniciativas")
+                    
+            ),
+
             selectInput(
                 inputId =  "añoGlobal", 
                 label = "Seleccione el año de los indicadores:", 
                 choices = 2016:as.numeric(format(Sys.Date(),"%Y")),
                 selected = 2016
             ),
+
         br(),
         br(),
         br(),
@@ -37,23 +47,27 @@ shinyUI(dashboardPage(
         br(),
         br(),
         br(),
-        img(src="subdere.jpg", height=120, width=120)
+        img(src="subdere.jpg", height=120, width=120),
         
+
+            tags$div(class="header", checked=NA,
+                tags$p("¿Quieres acceder a la BD?"),
+                tags$a(href="https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0",
+                       "Base de Datos")
+            )
+
     ),
     
     ##dashboardBody muestra el cuerpo de la pagina
     dashboardBody(
         ## tabItems permite ver cada pagina del menu lateral
         tabItems(
-            
-            tabItem(tabName = "inicio",
-                    
+            tabItem(tabName = "estadisticasRegion",
                     h2("Seguimiento iniciativas FIC-R Región"),
                     fluidRow(
                         box(h2("Regional")),
-                        box(h2("Nacional")),
+                        box(h2("Nacional"))
                     ),
-                   
                     fluidRow(
                         infoBoxOutput("indIniciativasAtrasadasReg", width = 6),
                         infoBoxOutput("indIniciativasAtrasadasNac", width = 6),
@@ -68,9 +82,8 @@ shinyUI(dashboardPage(
                     ),
                     
                     fluidRow(
-                        h2("Graficos"),
+                        h2("Gráficos de seguimiento")
                     ),
-                    
                     fluidRow(
                         box(title = "Ejecutor público vs privado", status = "primary", solidHeader = TRUE, width = 12,
                             plotOutput("ejecutorPublicoVsPrivado"))
@@ -79,14 +92,11 @@ shinyUI(dashboardPage(
                         box(title = "Iniciativas por sector", status = "primary", solidHeader = TRUE, width = 12,
                             plotOutput("iniciativasPorSector"))
                     ),
-                    
-                    "\n",
-                    
                     fluidRow(
                         
                         box( radioButtons("varSeleccionada", h4("Seleccione la variable X del gráfico"),
                                           choices = list("Destino" = 1, "Sector" = 2),
-                                          selected = 1),
+                                          selected = 1)
                         ),
                         box(title= "Frecuencia de la variable seleccionada", status= "primary", solidHeader = TRUE,width = 12,
                             plotOutput("varX"))
@@ -94,22 +104,19 @@ shinyUI(dashboardPage(
                     ),
                     
                     fluidRow(
-                        h2("Todas las iniciativas"),
+                        h2("Todas las iniciativas")
                     ),
-                    
                     fluidRow(
-                        div ( style  =  ' overflow-x: scroll ' , dataTableOutput("tablaIniciativa"))
+                        div (style  =  ' overflow-x: scroll ' , dataTableOutput("tablaIniciativa"))
                     )
             ),
             
-            tabItem(tabName = "iniciativas",
+            tabItem(tabName = "indicadoresPorIniciativas",
                     
                     h2("Indicadores por iniciativa"),
                     fluidRow(
                         box(
-                           
                             uiOutput("selecAño")
-                            
                         )
                     ),
                     
