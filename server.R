@@ -11,10 +11,18 @@ shinyServer(function(input, output) {
     indIniciativasAtrasadas <- (numeroIniciativasAtrasadas/numeroIniciativasTotales)*100
     aproximacionInicAtras <- round(indIniciativasAtrasadas, 2)
     porcentajeInicAtras <- str_c( aproximacionInicAtras, "%")
-    infoBox(
-      "Iniciativas atrasadas", porcentajeInicAtras, icon = icon("fas fa-calendar-times"),
-      width = 6, color = "red", fill = TRUE
-    )
+    critico <- input$critAtraso 
+    if(aproximacionInicAtras > critico ){
+      infoBox(
+        "Iniciativas atrasadas", porcentajeInicAtras, icon = icon("fas fa-calendar-times"),
+        width = 6, color = "red", fill = TRUE
+      )
+    } else {
+      infoBox(
+        "Iniciativas atrasadas", porcentajeInicAtras, icon = icon("fas fa-check-circle"),
+        width = 6, color = "green", fill = TRUE
+      ) 
+    }
   })
   output$indIniciativasAtrasadasNac <- renderInfoBox({
     # añoGlob <- input$añoGlobal
@@ -26,7 +34,7 @@ shinyServer(function(input, output) {
     porcentajeInicAtrasNac <- str_c( aproximacionInicAtrasNac, "%")
     infoBox(
       "Iniciativas atrasadas", porcentajeInicAtrasNac, icon = icon("fas fa-calendar-times"),
-      width = 6, color = "red", fill = TRUE
+      width = 6, color = "green", fill = TRUE
     )
   })
   output$indSectorPriorizadoReg <- renderInfoBox({
@@ -37,10 +45,20 @@ shinyServer(function(input, output) {
     indSecPriorizado <- (numeroIniciativasSectPr/numeroIniciativasTotales)*100
     aproximacionSecPriorizado <- round(indSecPriorizado, 2)
     porcentajeSectPrio <- str_c( aproximacionSecPriorizado, "%")
-    infoBox(
-      "Iniciativas en sector priorizado", porcentajeSectPrio , icon = icon("fas fa-check-circle"),
-      width = 6, color = "green", fill = TRUE
-    )
+    #lo nuevo
+    critico <- input$critAtraso 
+    if(aproximacionSecPriorizado > critico ){
+      infoBox(
+        "Iniciativas en sector priorizado", porcentajeSectPrio, icon = icon("fas fa-calendar-times"),
+        width = 6, color = "red", fill = TRUE
+      )
+    } else {
+      infoBox(
+        "Iniciativas en sector priorizado", porcentajeSectPrio, icon = icon("fas fa-check-circle"),
+        width = 6, color = "blue", fill = TRUE
+      ) 
+    }
+    
   })
   output$indSectorPriorizadoNac <- renderInfoBox({
     indSecPriorizadoNac <- mean(BDnacional$'Iniciativas en sector priorizado')
@@ -48,7 +66,7 @@ shinyServer(function(input, output) {
     porcentajeSectPrioNac <- str_c( aproximacionSecPriorizadoNac, "%")
     infoBox(
       "Iniciativas en sector priorizado", porcentajeSectPrioNac, icon = icon("fas fa-check-circle"),
-      width = 6, color = "green", fill = TRUE
+      width = 6, color = "blue", fill = TRUE
     )
   })
   
@@ -63,10 +81,20 @@ shinyServer(function(input, output) {
     indCrecSecPriorizado <- ((numeroIniciativasSectPrAñoActual-numeroIniciativasSectPrAñoAnterior)/numeroIniciativasAñoAnterior)*100
     aproximacionCrecSecPriorizado <- round(indCrecSecPriorizado, 2)
     porcentajeCrecSectPrio <- str_c( aproximacionCrecSecPriorizado, "%")
-    infoBox(
-      "Crecimiento en sectores priorizados", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
-      width = 6, color = "blue", fill = TRUE
-    )
+    #lo nuevo
+    critico <- input$critAtraso 
+    if(aproximacionCrecSecPriorizado < critico ){
+      infoBox(
+        "Crecimiento en sector priorizado", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
+        width = 6, color = "red", fill = TRUE
+      )
+    } else {
+      infoBox(
+        "Crecimiento en sector priorizado", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
+        width = 6, color = "aqua", fill = TRUE
+      ) 
+    }
+    
   })
   output$indCrecimientoSPNac <- renderInfoBox({
     indCrecSecPriorizadoNac <- mean(BDnacional$'Crecimiento en sectores priorizados')
@@ -74,11 +102,11 @@ shinyServer(function(input, output) {
     porcentajeCrecSectPrioNac <- str_c( aproximacionCrecSecPriorizadoNac, "%")
     infoBox(
       "Crecimiento en sectores priorizados", porcentajeCrecSectPrioNac, icon = icon("fas fa-chart-line"),
-      width = 6, color = "blue", fill = TRUE
+      width = 6, color = "aqua", fill = TRUE
     )
   })
-  #no reconoce el benefAño
-    output$indBeneficiariosReg <- renderInfoBox({
+  
+  output$indBeneficiariosReg <- renderInfoBox({
     añoGlob <- input$añoGlobal
     benefAño <- filter (BDseguimiento, str_detect (BDseguimiento$Año, añoGlob) == TRUE)
     
@@ -88,10 +116,19 @@ shinyServer(function(input, output) {
     indBenefEfectivos <- (sumaBenefEfectivos/sumaBenefObjetivos)*100
     aproximacionBenefEfectivos <- round(indBenefEfectivos, 2)
     porcentajeBenefEfectivos <- str_c( aproximacionBenefEfectivos, "%")
-    infoBox(
-      "Beneficiarios efectivos cubiertos", porcentajeBenefEfectivos, icon = icon("fas fa-users"),
-      width = 6, color = "yellow", fill = TRUE
-    )
+    critico <- input$critAtraso 
+    if(aproximacionBenefEfectivos < critico ){
+      infoBox(
+        "Beneficiarios efectivos cubiertos", porcentajeBenefEfectivos, icon = icon("fas fa-users"),
+        width = 6, color = "red", fill = TRUE
+      )
+    } else {
+      infoBox(
+        "Beneficiarios efectivos cubiertos", porcentajeBenefEfectivos, icon = icon("fas fa-users"),
+        width = 6, color = "yellow", fill = TRUE
+      ) 
+    }
+    
   })
   output$indBeneficiariosNac <- renderInfoBox({
     indBenefEfectivosNac <- mean(BDnacional$'beneficiarios efectivos cubiertos')
@@ -111,10 +148,19 @@ shinyServer(function(input, output) {
     indCrecBeneficiarios <- ((sumaBenefEfectivosAñoActual-sumaBenefEfectivosAñoAnterior)/sumaBenefEfectivosAñoAnterior)*100
     aproximacionCrecBeneficiarios <- round(indCrecBeneficiarios, 2)
     porcentajeCrecBeneficiarios <- str_c( aproximacionCrecBeneficiarios, "%")
-    infoBox(
-      "Crecimiento beneficiarios cubiertos", porcentajeCrecBeneficiarios, icon = icon("fas fa-chart-line"),
-      width = 6, color = "orange", fill = TRUE
-    )
+    critico <- input$critAtraso 
+    if(aproximacionCrecBeneficiarios < critico ){
+      infoBox(
+        "Crecimiento beneficiarios cubiertos", porcentajeCrecBeneficiarios, icon = icon("fas fa-chart-line"),
+        width = 6, color = "red", fill = TRUE
+      )
+    } else {
+      infoBox(
+        "Crecimiento beneficiarios cubiertos", porcentajeCrecBeneficiarios, icon = icon("fas fa-chart-line"),
+        width = 6, color = "orange", fill = TRUE
+      ) 
+    }
+    
   })
   output$indCrecimientoBenefNac <- renderInfoBox({
     indCrecBeneficiariosNac <- mean(BDnacional$'Crecimiento beneficiarios cubiertos')
@@ -148,13 +194,13 @@ shinyServer(function(input, output) {
       scale_y_continuous("Frecuencia") +
       coord_flip()
   })
-
+  
   output$varX <- renderPlot({
     
     variableX <-input$varSeleccionada
     añoGlob <- input$añoGlobal
     añoGraf <- filter (BDiniciativas, str_detect (BDiniciativas$Año, añoGlob) == TRUE)
-  
+    
     if(variableX == 1){
       
       ggplot(añoGraf, aes(x = reorder(Destino, -table(Destino)[Destino]), fill = Destino)) + 
@@ -219,6 +265,15 @@ shinyServer(function(input, output) {
     indAvanceAct <- ((numActRealizadas/numActTotales)*100)
     indAvanceAct <- round(indAvanceAct, 2)
     indAvanceAct <- str_c(indAvanceAct, "%")
+    
+    
+    #intento progressbar
+    div(class = "progress-bar", role="progressbar", style="width: 25%;", 
+        valuenow = indAvanceAct, valuemin="0%", valuemax="100%")
+    tags$div(
+      HTML("<strong>Raw HTML!</strong>")
+    )
+    
     infoBox(
       "Avance según actividades", indAvanceAct, icon = icon("fas fa-clipboard"),
       width = 4, color = "green", fill = TRUE
@@ -268,8 +323,8 @@ shinyServer(function(input, output) {
     indBeneficiarios <- round(indBeneficiarios,2)
     indBeneficiarios <- str_c(indBeneficiarios, "%")
     
-    infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-users"),
-            width = 4, color = "yellow", fill = TRUE
+    infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-clipboard"),
+            width = 4, color = "green", fill = TRUE
     )
   })
   output$indBeneficiariosEmpresa <- renderInfoBox({
