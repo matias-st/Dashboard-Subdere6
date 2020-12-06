@@ -268,8 +268,8 @@ shinyServer(function(input, output) {
     indBeneficiarios <- round(indBeneficiarios,2)
     indBeneficiarios <- str_c(indBeneficiarios, "%")
     
-    infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-clipboard"),
-            width = 4, color = "green", fill = TRUE
+    infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-users"),
+            width = 4, color = "yellow", fill = TRUE
     )
   })
   output$indBeneficiariosEmpresa <- renderInfoBox({
