@@ -75,20 +75,13 @@ dashboardBody(
                     h2("Gráficos de seguimiento")
                 ),
                 
-                fluidRow(
-                    box(title = "Ejecutor público vs privado", status = "primary", solidHeader = TRUE, width = 12,
-                        plotOutput("ejecutorPublicoVsPrivado"))
-                ),
-                fluidRow(
-                    box(title = "Iniciativas por sector", status = "primary", solidHeader = TRUE, width = 12,
-                        plotOutput("iniciativasPorSector"))
-                ),
+                
                 
                 
                 fluidRow(
-                    
-                    box( radioButtons("varSeleccionada", h4("Seleccione la variable X del gráfico"),
-                                      choices = list("Destino" = 1, "Sector" = 2),
+                   
+                    box( radioButtons("varSeleccionada", h4("Seleccione el gráfico que desea visualizar:"),
+                                      choices = list("Destino Apuntado" = 1, "Sector Priorizado" = 2, "Tipo de ejecutor" = 3),
                                       selected = 1)
                     ),
                     box(title= "Frecuencia de la variable seleccionada", status= "primary", solidHeader = TRUE,width = 12,

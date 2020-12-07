@@ -174,52 +174,39 @@ shinyServer(function(input, output) {
   
   ##con los siguientes 3 output$... se envian al ui.R los gráficos de barra.
   
-  output$ejecutorPublicoVsPrivado <- renderPlot({
-    tablaEjecutor <- BDiniciativas[,3]
-    ggplot(tablaEjecutor, aes(x = reorder(TipoEjecutor, -table(TipoEjecutor)[TipoEjecutor]), fill = TipoEjecutor)) + 
-      geom_bar() +
-      
-      #facet_wrap(~Año, nrow = 1) +
-      scale_x_discrete("Tipo Ejecutor") +     
-      scale_y_continuous("Frecuencia") +
-      coord_flip()
-  })
-  output$iniciativasPorSector <- renderPlot({
-    tablaSector <- BDiniciativas[,8]
-    ggplot(tablaSector, aes(x = reorder(Sector, -table(Sector)[Sector]), fill = Sector)) + 
-      geom_bar() +
-      
-      #facet_wrap(~Año, nrow = 1) +
-      scale_x_discrete("Sector") +     
-      scale_y_continuous("Frecuencia") +
-      coord_flip()
-  })
-  
   output$varX <- renderPlot({
     
     variableX <-input$varSeleccionada
+    View(variableX)
     añoGlob <- input$añoGlobal
     añoGraf <- filter (BDiniciativas, str_detect (BDiniciativas$Año, añoGlob) == TRUE)
+    View(añoGraf)
     
     if(variableX == 1){
       
       ggplot(añoGraf, aes(x = reorder(Destino, -table(Destino)[Destino]), fill = Destino)) + 
         geom_bar() +
-        
-        #facet_wrap(~Año, nrow = 1) +
         scale_x_discrete("Destinos") +     
-        scale_y_continuous("Frecuencia") +
+        scale_y_continuous("Frecuencia [iniciativas]") +
         coord_flip()
       
-    } else {
+    }else
+    if (variableX == 2){
       
       ggplot(añoGraf, aes(x = reorder(Sector, -table(Sector)[Sector]), fill = Sector)) + 
         geom_bar() +
         scale_x_discrete("Sectores") +    
-        scale_y_continuous("Frecuencia") +
+        scale_y_continuous("Frecuencia [iniciativas]") +
+        coord_flip()
+    }else
+    if (variableX == 3){
+
+      ggplot(añoGraf, aes(x = reorder(TipoEjecutor, -table(TipoEjecutor)[TipoEjecutor]), fill = TipoEjecutor)) + 
+        geom_bar() +
+        scale_x_discrete("Tipo Ejecutor") +     
+        scale_y_continuous("Frecuencia [iniciativas]") +
         coord_flip()
     }
-    
     
   })
   
