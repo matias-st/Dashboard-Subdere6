@@ -85,7 +85,6 @@ shinyUI(dashboardPage(
                             uiOutput("selecAño")
                         )
                     ),
-                    
                     fluidRow(
                         infoBoxOutput("indTiempoTranscurrido", width = 4),
                         infoBoxOutput("indAvanceActividades", width = 4),
@@ -93,7 +92,6 @@ shinyUI(dashboardPage(
                         infoBoxOutput("indBeneficiarios", width = 6),
                         infoBoxOutput("indBeneficiariosEmpresa", width = 6)
                     ),
-                    
                     fluidRow(
                         div ( style  =  ' overflow-x: scroll ' , dataTableOutput("iniciativa1"))
                     )

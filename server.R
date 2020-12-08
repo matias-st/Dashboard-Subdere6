@@ -16,11 +16,11 @@ shinyServer(function(input, output) {
       width = 6, color = "red", fill = TRUE
     )
   })
+  # añoGlob <- input$añoGlobal
+  # View(añoGlob)
+  # iniciativasAtrasadasNac <- filter (BDactividades, str_detect (BDactividades$Año, añoGlob) == TRUE)
+  # View(iniciativasAtrasadasNac)
   output$indIniciativasAtrasadasNac <- renderInfoBox({
-    # añoGlob <- input$añoGlobal
-    # View(añoGlob)
-    # iniciativasAtrasadasNac <- filter (BDactividades, str_detect (BDactividades$Año, añoGlob) == TRUE)
-    # View(iniciativasAtrasadasNac)
     indIniciativasAtrasadasNacional <- mean(BDnacional$'Iniciativas atrasadas')
     aproximacionInicAtrasNac <- round(indIniciativasAtrasadasNacional, 2)
     porcentajeInicAtrasNac <- str_c( aproximacionInicAtrasNac, "%")
@@ -31,7 +31,8 @@ shinyServer(function(input, output) {
   })
   output$indSectorPriorizadoReg <- renderInfoBox({
     añoGlob <- input$añoGlobal
-    iniciativasSectorPriorizado <- filter(BDiniciativas, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    iniciativasSectorPriorizado <- filter(BDiniciativas, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía"
+                                          | Sector == "Agroindustria/Industria")
     iniciativasSectorPriorizado <- filter (iniciativasSectorPriorizado, str_detect (iniciativasSectorPriorizado$Año, añoGlob) == TRUE)
     numeroIniciativasSectPr <- nrow(iniciativasSectorPriorizado)
     indSecPriorizado <- (numeroIniciativasSectPr/numeroIniciativasTotales)*100
