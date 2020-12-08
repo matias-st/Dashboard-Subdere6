@@ -25,10 +25,10 @@ shinyUI(dashboardPage(
                      br(),
                      br(),
                      
-                     tags$div(class="header", checked=NA,
-                              tags$p("¿Quieres acceder a la BD?"),
+                     tags$div(class="accesoBD", checked=NA,
+                              tags$p(HTML( "&nbsp;&nbsp;&nbsp;¿Quieres acceder a la BD?")),
                               tags$a(href="https://docs.google.com/spreadsheets/d/1QkMjIkeZgyCdhZYTHwZai9BsjN2lamvf_8AgwSRS5XI/edit#gid=0",
-                                     "Base de Datos")
+                                     HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Base de Datos"))
                      ),
     br(),
     br(),
@@ -37,8 +37,8 @@ shinyUI(dashboardPage(
     br(),
     br(),
     br(),
-    br(),
-    HTML('<center><img src="subdere.jpg" height="120" width="120" ></center>')
+    br()
+    #HTML('<center><img src="subdere.jpg" height="120" width="120" ></center>')
     
 ),
 
@@ -59,16 +59,21 @@ dashboardBody(
                     sliderInput("critAtraso", "Seleccione el % crítico de atraso:",
                                 min = 0, max = 100, value = 20
                     ),
+                    fluidRow(
                     infoBoxOutput("indIniciativasAtrasadasReg", width = 6),
-                    infoBoxOutput("indIniciativasAtrasadasNac", width = 6),
+                    infoBoxOutput("indIniciativasAtrasadasNac", width = 6)),
+                    fluidRow(
                     infoBoxOutput("indSectorPriorizadoReg", width = 6),
-                    infoBoxOutput("indSectorPriorizadoNac", width = 6),
+                    infoBoxOutput("indSectorPriorizadoNac", width = 6)),
+                    fluidRow(
                     infoBoxOutput("indCrecimientoSPReg", width = 6),
-                    infoBoxOutput("indCrecimientoSPNac", width = 6),
+                    infoBoxOutput("indCrecimientoSPNac", width = 6)),
+                    fluidRow(
                     infoBoxOutput("indBeneficiariosReg", width = 6),
-                    infoBoxOutput("indBeneficiariosNac", width = 6),
+                    infoBoxOutput("indBeneficiariosNac", width = 6)),
+                    fluidRow(
                     infoBoxOutput("indCrecimientoBenefReg", width = 6),
-                    infoBoxOutput("indCrecimientoBenefNac", width = 6)
+                    infoBoxOutput("indCrecimientoBenefNac", width = 6))
                 ),
                 
                 fluidRow(
@@ -84,9 +89,10 @@ dashboardBody(
                                       choices = list("Destino Apuntado" = 1, "Sector Priorizado" = 2, "Tipo de ejecutor" = 3),
                                       selected = 1)
                     ),
+                    fluidRow(
                     box(title= "Frecuencia de la variable seleccionada", status= "primary", solidHeader = TRUE,width = 12,
                         plotOutput("varX"))
-                    
+                    )
                 ),
                 
                 fluidRow(
@@ -120,11 +126,11 @@ dashboardBody(
                 fluidRow(
                     div ( style  =  ' overflow-x: scroll ' , dataTableOutput("iniciativa1"))
                 )
-        #tabItem        
+              
         )
         
-    )#tabItems
-)#dashboardbody
-)#shiny UI
-)#?
+    )
+)
+)
+)
 

@@ -72,11 +72,22 @@ shinyServer(function(input, output) {
   
   #este probablemente se pueda trabajar con el añoGlobal
   output$indCrecimientoSPReg <- renderInfoBox({
-    iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+     añoGlob <- input$añoGlobal
+    if (añoGlob == 2016){
+     infoBox(
+    "Crecimiento en sector priorizado", "No existen datos del año 2015 para comparar", icon = icon("fas fa-chart-line"),
+    width = 6, color = "red", fill = TRUE
+  )
+    } else{
+    ##iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoGlob & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
-    iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    añoAnt <- as.numeric(añoGlob) - 1 
+    
+    ##iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+    iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnt & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     numeroIniciativasSectPrAñoAnterior <- nrow(iniciativasSectPrioAñoAnterior)
-    totalIniciativasAñoAnterior <- filter(BDiniciativas, Año == añoAnterior)
+    totalIniciativasAñoAnterior <- filter(BDiniciativas, Año == añoAnt)
     numeroIniciativasAñoAnterior <- nrow(totalIniciativasAñoAnterior)
     indCrecSecPriorizado <- ((numeroIniciativasSectPrAñoActual-numeroIniciativasSectPrAñoAnterior)/numeroIniciativasAñoAnterior)*100
     aproximacionCrecSecPriorizado <- round(indCrecSecPriorizado, 2)
@@ -94,7 +105,7 @@ shinyServer(function(input, output) {
         width = 6, color = "aqua", fill = TRUE
       ) 
     }
-    
+    }
   })
   output$indCrecimientoSPNac <- renderInfoBox({
     indCrecSecPriorizadoNac <- mean(BDnacional$'Crecimiento en sectores priorizados')
@@ -141,8 +152,20 @@ shinyServer(function(input, output) {
   })
   #este también podría trabajarse con el añoGlobal
   output$indCrecimientoBenefReg <- renderInfoBox({
-    iniciativasAñoActual <- filter(BDseguimiento, Año == añoActual)
-    iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnterior)
+    añoGlob <- input$añoGlobal
+    añoAnt <- as.numeric(añoGlob) - 1
+  if (añoGlob == 2016){
+    infoBox(
+    "Crecimiento beneficiarios cubiertos", "No existen datos del año 2015 para comparar", icon = icon("fas fa-chart-line"),
+    width = 6, color = "red", fill = TRUE
+  )
+    }else {
+    
+    
+     ##iniciativasAñoActual <- filter(BDseguimiento, Año == añoActual)
+    iniciativasAñoActual <- filter(BDseguimiento, Año == añoGlob)
+    ##iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnterior)
+    iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnt)
     sumaBenefEfectivosAñoActual <- colSums (iniciativasAñoActual[ , 7])
     sumaBenefEfectivosAñoAnterior <- colSums (iniciativasAñoAnterior[ , 7])
     indCrecBeneficiarios <- ((sumaBenefEfectivosAñoActual-sumaBenefEfectivosAñoAnterior)/sumaBenefEfectivosAñoAnterior)*100
@@ -160,7 +183,7 @@ shinyServer(function(input, output) {
         width = 6, color = "orange", fill = TRUE
       ) 
     }
-    
+    }
   })
   output$indCrecimientoBenefNac <- renderInfoBox({
     indCrecBeneficiariosNac <- mean(BDnacional$'Crecimiento beneficiarios cubiertos')
@@ -177,11 +200,9 @@ shinyServer(function(input, output) {
   output$varX <- renderPlot({
     
     variableX <-input$varSeleccionada
-    View(variableX)
     añoGlob <- input$añoGlobal
     añoGraf <- filter (BDiniciativas, str_detect (BDiniciativas$Año, añoGlob) == TRUE)
-    View(añoGraf)
-    
+
     if(variableX == 1){
       
       ggplot(añoGraf, aes(x = reorder(Destino, -table(Destino)[Destino]), fill = Destino)) + 
