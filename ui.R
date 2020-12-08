@@ -18,8 +18,8 @@ shinyUI(dashboardPage(
                      selectInput(
                          inputId =  "añoGlobal", 
                          label = "Seleccione el año de los indicadores:", 
-                         choices = 2016:as.numeric(format(Sys.Date(),"%Y")),
-                         selected = 2016
+                         choices = 2016:añoActual,
+                         selected = añoActual
                      ),
                      br(),
                      br(),

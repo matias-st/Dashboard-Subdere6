@@ -19,7 +19,7 @@ shinyServer(function(input, output) {
       )
     } else {
       infoBox(
-        "Iniciativas atrasadas", porcentajeInicAtras, icon = icon("fas fa-check-circle"),
+        "Iniciativas atrasadas", porcentajeInicAtras, icon = icon("fas fa-calendar-check"),
         width = 6, color = "green", fill = TRUE
       ) 
     }
@@ -49,7 +49,7 @@ shinyServer(function(input, output) {
     critico <- input$critAtraso 
     if(aproximacionSecPriorizado > critico ){
       infoBox(
-        "Iniciativas en sector priorizado", porcentajeSectPrio, icon = icon("fas fa-calendar-times"),
+        "Iniciativas en sector priorizado", porcentajeSectPrio, icon = icon("fas fa-times-circle"),
         width = 6, color = "red", fill = TRUE
       )
     } else {
