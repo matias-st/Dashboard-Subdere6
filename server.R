@@ -24,11 +24,11 @@ shinyServer(function(input, output) {
       ) 
     }
   })
-  # añoGlob <- input$añoGlobal
-  # View(añoGlob)
-  # iniciativasAtrasadasNac <- filter (BDactividades, str_detect (BDactividades$Año, añoGlob) == TRUE)
-  # View(iniciativasAtrasadasNac)
   output$indIniciativasAtrasadasNac <- renderInfoBox({
+    # añoGlob <- input$añoGlobal
+    # View(añoGlob)
+    # iniciativasAtrasadasNac <- filter (BDactividades, str_detect (BDactividades$Año, añoGlob) == TRUE)
+    # View(iniciativasAtrasadasNac)
     indIniciativasAtrasadasNacional <- mean(BDnacional$'Iniciativas atrasadas')
     aproximacionInicAtrasNac <- round(indIniciativasAtrasadasNacional, 2)
     porcentajeInicAtrasNac <- str_c( aproximacionInicAtrasNac, "%")
@@ -39,8 +39,7 @@ shinyServer(function(input, output) {
   })
   output$indSectorPriorizadoReg <- renderInfoBox({
     añoGlob <- input$añoGlobal
-    iniciativasSectorPriorizado <- filter(BDiniciativas, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía"
-                                          | Sector == "Agroindustria/Industria")
+    iniciativasSectorPriorizado <- filter(BDiniciativas, Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
     iniciativasSectorPriorizado <- filter (iniciativasSectorPriorizado, str_detect (iniciativasSectorPriorizado$Año, añoGlob) == TRUE)
     numeroIniciativasSectPr <- nrow(iniciativasSectorPriorizado)
     indSecPriorizado <- (numeroIniciativasSectPr/numeroIniciativasTotales)*100
@@ -73,39 +72,39 @@ shinyServer(function(input, output) {
   
   #este probablemente se pueda trabajar con el añoGlobal
   output$indCrecimientoSPReg <- renderInfoBox({
-     añoGlob <- input$añoGlobal
+    añoGlob <- input$añoGlobal
     if (añoGlob == 2016){
-     infoBox(
-    "Crecimiento en sector priorizado", "No existen datos del año 2015 para comparar", icon = icon("fas fa-chart-line"),
-    width = 6, color = "red", fill = TRUE
-  )
-    } else{
-    ##iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
-    iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoGlob & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
-    numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
-    añoAnt <- as.numeric(añoGlob) - 1 
-    
-    ##iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
-    iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnt & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
-    numeroIniciativasSectPrAñoAnterior <- nrow(iniciativasSectPrioAñoAnterior)
-    totalIniciativasAñoAnterior <- filter(BDiniciativas, Año == añoAnt)
-    numeroIniciativasAñoAnterior <- nrow(totalIniciativasAñoAnterior)
-    indCrecSecPriorizado <- ((numeroIniciativasSectPrAñoActual-numeroIniciativasSectPrAñoAnterior)/numeroIniciativasAñoAnterior)*100
-    aproximacionCrecSecPriorizado <- round(indCrecSecPriorizado, 2)
-    porcentajeCrecSectPrio <- str_c( aproximacionCrecSecPriorizado, "%")
-    #lo nuevo
-    critico <- input$critAtraso 
-    if(aproximacionCrecSecPriorizado < critico ){
       infoBox(
-        "Crecimiento en sector priorizado", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
+        "Crecimiento en sector priorizado", "No existen datos del año 2015 para comparar", icon = icon("fas fa-chart-line"),
         width = 6, color = "red", fill = TRUE
       )
-    } else {
-      infoBox(
-        "Crecimiento en sector priorizado", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
-        width = 6, color = "aqua", fill = TRUE
-      ) 
-    }
+    } else{
+      ##iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoActual & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+      iniciativasSectPrioAñoActual <- filter(BDiniciativas, Año == añoGlob & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+      numeroIniciativasSectPrAñoActual <- nrow(iniciativasSectPrioAñoActual)
+      añoAnt <- as.numeric(añoGlob) - 1 
+      
+      ##iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnterior & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+      iniciativasSectPrioAñoAnterior <- filter(BDiniciativas, Año == añoAnt & Sector == "Turismo" | Sector == "Agroindustria" | Sector == "Energía" | Sector == "Agroindustria/Industria")
+      numeroIniciativasSectPrAñoAnterior <- nrow(iniciativasSectPrioAñoAnterior)
+      totalIniciativasAñoAnterior <- filter(BDiniciativas, Año == añoAnt)
+      numeroIniciativasAñoAnterior <- nrow(totalIniciativasAñoAnterior)
+      indCrecSecPriorizado <- ((numeroIniciativasSectPrAñoActual-numeroIniciativasSectPrAñoAnterior)/numeroIniciativasAñoAnterior)*100
+      aproximacionCrecSecPriorizado <- round(indCrecSecPriorizado, 2)
+      porcentajeCrecSectPrio <- str_c( aproximacionCrecSecPriorizado, "%")
+      #lo nuevo
+      critico <- input$critAtraso 
+      if(aproximacionCrecSecPriorizado < critico ){
+        infoBox(
+          "Crecimiento en sector priorizado", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
+          width = 6, color = "red", fill = TRUE
+        )
+      } else {
+        infoBox(
+          "Crecimiento en sector priorizado", porcentajeCrecSectPrio, icon = icon("fas fa-chart-line"),
+          width = 6, color = "aqua", fill = TRUE
+        ) 
+      }
     }
   })
   output$indCrecimientoSPNac <- renderInfoBox({
@@ -155,35 +154,35 @@ shinyServer(function(input, output) {
   output$indCrecimientoBenefReg <- renderInfoBox({
     añoGlob <- input$añoGlobal
     añoAnt <- as.numeric(añoGlob) - 1
-  if (añoGlob == 2016){
-    infoBox(
-    "Crecimiento beneficiarios cubiertos", "No existen datos del año 2015 para comparar", icon = icon("fas fa-chart-line"),
-    width = 6, color = "red", fill = TRUE
-  )
-    }else {
-    
-    
-     ##iniciativasAñoActual <- filter(BDseguimiento, Año == añoActual)
-    iniciativasAñoActual <- filter(BDseguimiento, Año == añoGlob)
-    ##iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnterior)
-    iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnt)
-    sumaBenefEfectivosAñoActual <- colSums (iniciativasAñoActual[ , 7])
-    sumaBenefEfectivosAñoAnterior <- colSums (iniciativasAñoAnterior[ , 7])
-    indCrecBeneficiarios <- ((sumaBenefEfectivosAñoActual-sumaBenefEfectivosAñoAnterior)/sumaBenefEfectivosAñoAnterior)*100
-    aproximacionCrecBeneficiarios <- round(indCrecBeneficiarios, 2)
-    porcentajeCrecBeneficiarios <- str_c( aproximacionCrecBeneficiarios, "%")
-    critico <- input$critAtraso 
-    if(aproximacionCrecBeneficiarios < critico ){
+    if (añoGlob == 2016){
       infoBox(
-        "Crecimiento beneficiarios cubiertos", porcentajeCrecBeneficiarios, icon = icon("fas fa-chart-line"),
+        "Crecimiento beneficiarios cubiertos", "No existen datos del año 2015 para comparar", icon = icon("fas fa-chart-line"),
         width = 6, color = "red", fill = TRUE
       )
-    } else {
-      infoBox(
-        "Crecimiento beneficiarios cubiertos", porcentajeCrecBeneficiarios, icon = icon("fas fa-chart-line"),
-        width = 6, color = "orange", fill = TRUE
-      ) 
-    }
+    }else {
+      
+      
+      ##iniciativasAñoActual <- filter(BDseguimiento, Año == añoActual)
+      iniciativasAñoActual <- filter(BDseguimiento, Año == añoGlob)
+      ##iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnterior)
+      iniciativasAñoAnterior <- filter(BDseguimiento, Año == añoAnt)
+      sumaBenefEfectivosAñoActual <- colSums (iniciativasAñoActual[ , 7])
+      sumaBenefEfectivosAñoAnterior <- colSums (iniciativasAñoAnterior[ , 7])
+      indCrecBeneficiarios <- ((sumaBenefEfectivosAñoActual-sumaBenefEfectivosAñoAnterior)/sumaBenefEfectivosAñoAnterior)*100
+      aproximacionCrecBeneficiarios <- round(indCrecBeneficiarios, 2)
+      porcentajeCrecBeneficiarios <- str_c( aproximacionCrecBeneficiarios, "%")
+      critico <- input$critAtraso 
+      if(aproximacionCrecBeneficiarios < critico ){
+        infoBox(
+          "Crecimiento beneficiarios cubiertos", porcentajeCrecBeneficiarios, icon = icon("fas fa-chart-line"),
+          width = 6, color = "red", fill = TRUE
+        )
+      } else {
+        infoBox(
+          "Crecimiento beneficiarios cubiertos", porcentajeCrecBeneficiarios, icon = icon("fas fa-chart-line"),
+          width = 6, color = "orange", fill = TRUE
+        ) 
+      }
     }
   })
   output$indCrecimientoBenefNac <- renderInfoBox({
@@ -203,7 +202,7 @@ shinyServer(function(input, output) {
     variableX <-input$varSeleccionada
     añoGlob <- input$añoGlobal
     añoGraf <- filter (BDiniciativas, str_detect (BDiniciativas$Año, añoGlob) == TRUE)
-
+    
     if(variableX == 1){
       
       ggplot(añoGraf, aes(x = reorder(Destino, -table(Destino)[Destino]), fill = Destino)) + 
@@ -213,22 +212,22 @@ shinyServer(function(input, output) {
         coord_flip()
       
     }else
-    if (variableX == 2){
-      
-      ggplot(añoGraf, aes(x = reorder(Sector, -table(Sector)[Sector]), fill = Sector)) + 
-        geom_bar() +
-        scale_x_discrete("Sectores") +    
-        scale_y_continuous("Frecuencia [iniciativas]") +
-        coord_flip()
-    }else
-    if (variableX == 3){
-
-      ggplot(añoGraf, aes(x = reorder(TipoEjecutor, -table(TipoEjecutor)[TipoEjecutor]), fill = TipoEjecutor)) + 
-        geom_bar() +
-        scale_x_discrete("Tipo Ejecutor") +     
-        scale_y_continuous("Frecuencia [iniciativas]") +
-        coord_flip()
-    }
+      if (variableX == 2){
+        
+        ggplot(añoGraf, aes(x = reorder(Sector, -table(Sector)[Sector]), fill = Sector)) + 
+          geom_bar() +
+          scale_x_discrete("Sectores") +    
+          scale_y_continuous("Frecuencia [iniciativas]") +
+          coord_flip()
+      }else
+        if (variableX == 3){
+          
+          ggplot(añoGraf, aes(x = reorder(TipoEjecutor, -table(TipoEjecutor)[TipoEjecutor]), fill = TipoEjecutor)) + 
+            geom_bar() +
+            scale_x_discrete("Tipo Ejecutor") +     
+            scale_y_continuous("Frecuencia [iniciativas]") +
+            coord_flip()
+        }
     
   })
   
