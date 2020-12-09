@@ -116,11 +116,12 @@ shinyUI(dashboardPage(
                     ),
                     
                     fluidRow(
-                        infoBoxOutput("indTiempoTranscurrido", width = 4),
+                        infoBoxOutput("fechInicio", width = 6),
+                        infoBoxOutput("fechEntrega", width = 6),
                         infoBoxOutput("indAvanceActividades", width = 4),
                         infoBoxOutput("indAvanceComponentes", width = 4),
-                        infoBoxOutput("indBeneficiarios", width = 6),
-                        infoBoxOutput("indBeneficiariosEmpresa", width = 6)
+                        infoBoxOutput("indBeneficiarios", width = 4)
+                        
                     ),
                     
                     fluidRow(

@@ -244,7 +244,18 @@ shinyServer(function(input, output) {
   })
   
   ##cajitas de indicadores para la seccion del sidebar de indicadores por iniciativa.
-  output$indTiempoTranscurrido <- renderInfoBox({
+  output$fechInicio <- renderInfoBox({
+    x <- input$Iniciativas
+    y <- input$añoGlobal
+    activ <- filter(BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x))
+    activ <- filter(activ, str_detect (activ$`Año`, y) == TRUE)
+    activ <- select(activ, "Fecha comienzo")
+    infoBox(
+      "Fecha inicio iniciativa", activ, icon = icon("fas fa-calendar-alt"),
+      width = 4, color = "orange", fill = TRUE
+    )
+  })
+  output$fechEntrega <- renderInfoBox({
     x <- input$Iniciativas
     y <- input$añoGlobal
     activ <- filter(BDseguimiento, str_detect (BDseguimiento$`Nombre Proyecto`, x))
@@ -331,16 +342,11 @@ shinyServer(function(input, output) {
     indBeneficiarios <- round(indBeneficiarios,2)
     indBeneficiarios <- str_c(indBeneficiarios, "%")
     
-    infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-clipboard"),
-            width = 4, color = "green", fill = TRUE
+    infoBox("Beneficiarios efectivos cubiertos",indBeneficiarios, icon = icon("fas fa-users"),
+            width = 4, color = "aqua", fill = TRUE
     )
   })
-  output$indBeneficiariosEmpresa <- renderInfoBox({
-    infoBox(
-      "Beneficiarios empresa cubiertos", "14%", icon = icon("fas fa-industry"),
-      width = 6, color = "purple", fill = TRUE
-    )
-  })
+ 
   
   ##se crea la tabla interactiva para la seccion de indicadores por iniciativa.
   tablaIniciativa1 <- BDactividades[, 3:11]
